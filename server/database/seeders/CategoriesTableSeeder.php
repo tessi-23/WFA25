@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -13,25 +14,28 @@ class CategoriesTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('categories')->insert([
-            [
-                'title' => 'KWM',
-                'description' => 'Kommunikation, Wissen, Medien',
-                'created_at' => date("Y-m-d H:i:s"),
-                'updated_at' => date("Y-m-d H:i:s")
-            ],
-            [
-                'title' => 'MTD',
-                'description' => 'Medientechnik und Design',
-                'created_at' => date("Y-m-d H:i:s"),
-                'updated_at' => date("Y-m-d H:i:s")
-            ],
-            [
-                'title' => 'SE',
-                'description' => 'Software Engineering',
-                'created_at' => date("Y-m-d H:i:s"),
-                'updated_at' => date("Y-m-d H:i:s")
-            ]
-        ]);
+        // Kategorie 1: KWM
+        $category1 = new Category;
+        $category1->title = 'KWM';
+        $category1->description = 'Kommunikation, Wissen, Medien';
+        $category1->created_at = date("Y-m-d H:i:s");
+        $category1->updated_at = date("Y-m-d H:i:s");
+        $category1->save();
+
+        // Kategorie 2: MTD
+        $category2 = new Category;
+        $category2->title = 'MTD';
+        $category2->description = 'Medientechnik und Design';
+        $category2->created_at = date("Y-m-d H:i:s");
+        $category2->updated_at = date("Y-m-d H:i:s");
+        $category2->save();
+
+        // Kategorie 3: SE
+        $category3 = new Category;
+        $category3->title = 'SE';
+        $category3->description = 'Software Engineering';
+        $category3->created_at = date("Y-m-d H:i:s");
+        $category3->updated_at = date("Y-m-d H:i:s");
+        $category3->save();
     }
 }

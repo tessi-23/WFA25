@@ -18,7 +18,8 @@ return new class extends Migration
             $table->time('start');
             $table->time('end');
             $table->enum('status',['available', 'booked', 'done', 'canceled']);
-            $table->foreignId('lesson_id')->constrained('lessons')->onDelete('cascade');
+            $table->integer('price');
+            $table->foreignId('lesson_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

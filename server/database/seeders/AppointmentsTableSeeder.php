@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Appointment;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -13,77 +14,83 @@ class AppointmentsTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('appointments')->insert([
-            // Vue Termin 1
-            [
-                'title' => 'Vue Einführung',
-                'date' => '2025-05-10',
-                'start' => '10:00:00',
-                'end' => '12:00:00',
-                'status' => 'available',
-                'lesson_id' => 1, // Vue
-                'created_at' => date("Y-m-d H:i:s"),
-                'updated_at' => date("Y-m-d H:i:s")
-            ],
-            // Vue Termin 2
-            [
-                'title' => 'Vue Fortgeschrittene Themen',
-                'date' => '2025-05-17',
-                'start' => '14:00:00',
-                'end' => '16:00:00',
-                'status' => 'booked',
-                'lesson_id' => 1, // Vue
-                'created_at' => date("Y-m-d H:i:s"),
-                'updated_at' => date("Y-m-d H:i:s")
-            ],
+        // Vue Termin 1
+        $appointment1 = new Appointment;
+        $appointment1->title = 'Vue Einführung';
+        $appointment1->date = '2025-05-10';
+        $appointment1->start = '10:00:00';
+        $appointment1->end = '12:00:00';
+        $appointment1->status = 'available';
+        $appointment1->price = 10;
+        $appointment1->lesson_id = 1; // Vue
+        $appointment1->created_at = date("Y-m-d H:i:s");
+        $appointment1->updated_at = date("Y-m-d H:i:s");
+        $appointment1->save();
 
-            // JavaScript Termin 1
-            [
-                'title' => 'JavaScript Einführung',
-                'date' => '2025-05-01',
-                'start' => '09:00:00',
-                'end' => '11:00:00',
-                'status' => 'done',
-                'lesson_id' => 2, // JavaScript
-                'created_at' => date("Y-m-d H:i:s"),
-                'updated_at' => date("Y-m-d H:i:s")
-            ],
-            // JavaScript Termin 2
-            [
-                'title' => 'JavaScript Fortgeschrittene Themen',
-                'date' => '2025-05-19',
-                'start' => '15:00:00',
-                'end' => '17:00:00',
-                'status' => 'available',
-                'lesson_id' => 2, // JavaScript
-                'created_at' => date("Y-m-d H:i:s"),
-                'updated_at' => date("Y-m-d H:i:s")
-            ],
+        // Vue Termin 2
+        $appointment2 = new Appointment;
+        $appointment2->title = 'Vue Fortgeschrittene Themen';
+        $appointment2->date = '2025-05-17';
+        $appointment2->start = '14:00:00';
+        $appointment2->end = '16:00:00';
+        $appointment2->status = 'booked';
+        $appointment2->price = 11;
+        $appointment2->lesson_id = 1; // Vue
+        $appointment2->created_at = date("Y-m-d H:i:s");
+        $appointment2->updated_at = date("Y-m-d H:i:s");
+        $appointment2->save();
 
-            // C# Termin 1
-            [
-                'title' => 'C# Grundlagen',
-                'date' => '2025-05-15',
-                'start' => '13:00:00',
-                'end' => '14:00:00',
-                'status' => 'available',
-                'lesson_id' => 3, // C#
-                'created_at' => date("Y-m-d H:i:s"),
-                'updated_at' => date("Y-m-d H:i:s")
-            ],
+        // JavaScript Termin 1
+        $appointment3 = new Appointment;
+        $appointment3->title = 'JavaScript Einführung';
+        $appointment3->date = '2025-05-01';
+        $appointment3->start = '09:00:00';
+        $appointment3->end = '11:00:00';
+        $appointment3->status = 'done';
+        $appointment3->price = 10;
+        $appointment3->lesson_id = 2; // JavaScript
+        $appointment3->created_at = date("Y-m-d H:i:s");
+        $appointment3->updated_at = date("Y-m-d H:i:s");
+        $appointment3->save();
 
-            // Blender Termin 1
-            [
-                'title' => 'Blender Einführung',
-                'date' => '2025-05-20',
-                'start' => '11:00:00',
-                'end' => '13:00:00',
-                'status' => 'available',
-                'lesson_id' => 4, // Blender
-                'created_at' => date("Y-m-d H:i:s"),
-                'updated_at' => date("Y-m-d H:i:s")
-            ],
-        ]);
+        // JavaScript Termin 2
+        $appointment4 = new Appointment;
+        $appointment4->title = 'JavaScript Fortgeschrittene Themen';
+        $appointment4->date = '2025-05-19';
+        $appointment4->start = '15:00:00';
+        $appointment4->end = '17:00:00';
+        $appointment4->status = 'available';
+        $appointment4->price = 20;
+        $appointment4->lesson_id = 2; // JavaScript
+        $appointment4->created_at = date("Y-m-d H:i:s");
+        $appointment4->updated_at = date("Y-m-d H:i:s");
+        $appointment4->save();
+
+        // C# Termin 1
+        $appointment5 = new Appointment;
+        $appointment5->title = 'C# Grundlagen';
+        $appointment5->date = '2025-05-15';
+        $appointment5->start = '13:00:00';
+        $appointment5->end = '14:00:00';
+        $appointment5->status = 'available';
+        $appointment5->price = 20;
+        $appointment5->lesson_id = 3; // C#
+        $appointment5->created_at = date("Y-m-d H:i:s");
+        $appointment5->updated_at = date("Y-m-d H:i:s");
+        $appointment5->save();
+
+        // Blender Termin 1
+        $appointment6 = new Appointment;
+        $appointment6->title = 'Blender Einführung';
+        $appointment6->date = '2025-05-20';
+        $appointment6->start = '11:00:00';
+        $appointment6->end = '13:00:00';
+        $appointment6->status = 'available';
+        $appointment6->price = 15;
+        $appointment6->lesson_id = 4; // Blender
+        $appointment6->created_at = date("Y-m-d H:i:s");
+        $appointment6->updated_at = date("Y-m-d H:i:s");
+        $appointment6->save();
 
     }
 }
