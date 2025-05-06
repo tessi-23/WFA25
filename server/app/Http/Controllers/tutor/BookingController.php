@@ -86,7 +86,7 @@ class BookingController extends Controller
             }
         }
 
-        // jetzt alle zukünfitigen accepted Buchungen heraussuchen
+        // jetzt alle zukünftigen accepted Buchungen heraussuchen
         $upcomingBookings = Booking::where('tutor_id', $tutor->id)
             ->where('status', 'accepted')
             ->whereHas('appointment', function ($query1) { // in appointments zeit prüfen
@@ -115,32 +115,5 @@ class BookingController extends Controller
             ->get();
 
         return response()->json($bookings);
-    }
-
-
-
-
-
-
-    public function booked(): JsonResponse {
-        $user = auth()->user(); // ruft authentifizierten Benutzer ab
-        $appointments = Booking::where('status', 'booked')
-            ->whereHas('lesson', function ($query) use ($user) {
-                $query->where('tutor_id', $user->id);
-            })
-            ->with(['lesson', 'appointment', 'student'])
-            ->get();
-
-        return response()->json($appointments, 200);
-    }
-
-    public function done(): JsonResponse {
-        $user = auth()->user(); // ruft authentifizierten Benutzer ab
-        $appointments = Booking::where('status', 'finished')
-            ->where('tutor_id', $user->id)
-            ->with(['appointment', 'student'])
-            ->get();
-
-        return response()->json($appointments, 200);
     }
 }

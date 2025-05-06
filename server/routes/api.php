@@ -9,6 +9,7 @@ use App\Http\Controllers\student\LessonController as StudentLessonController;
 use App\Http\Controllers\tutor\LessonController as TutorLessonController;
 use App\Http\Controllers\tutor\AppointmentController as TutorAppointmentController;
 use App\Http\Controllers\tutor\BookingController as TutorBookingController;
+use App\Http\Controllers\tutor\CategoryController as TutorCategoryController;
 use App\Http\Controllers\student\AppointmentController as StudentAppointmentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -34,13 +35,12 @@ Route::post('auth/logout', [AuthController::class,'logout']);
 
 // tutor
 Route::group(['middleware' => ['api','auth.jwt','auth.tutor']], function(){
-    // TODO: Methoden ergänzen
-    Route::get('/categories', [CategoryController::class, 'index']);
+    Route::get('/tutor/categories', [TutorCategoryController::class, 'index']);
+
     Route::get('/tutor/lessons', [TutorLessonController::class, 'index']);
+
     Route::get('/tutor/{lessonId}/appointments', [TutorAppointmentController::class, 'availableByLesson']);
 
-    //Route::get('/tutor/appointments/booked', [TutorAppointmentController::class, 'booked']);
-    //Route::get('/tutor/appointments/done', [TutorAppointmentController::class, 'done']);
     Route::get('/tutor/bookings', [TutorBookingController::class, 'index']);
     Route::get('/tutor/bookings/pending', [TutorBookingController::class, 'pending']);
     Route::get('/tutor/bookings/upcoming', [TutorBookingController::class, 'upcoming']);
@@ -49,7 +49,7 @@ Route::group(['middleware' => ['api','auth.jwt','auth.tutor']], function(){
 
 // admin
 Route::group(['middleware' => ['api','auth.jwt','auth.admin']], function(){
-
+    Route::get('/categories', [CategoryController::class, 'index']);
 });
 
 // general
