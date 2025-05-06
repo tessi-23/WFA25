@@ -66,17 +66,16 @@ class BookingController extends Controller
     }
 
     // Anstehende gebuchte Termine
-    // TODO: später prüfen/testen
     public function upcoming(): JsonResponse {
         $tutor = auth()->user();
 
         $bookings = Booking::where('tutor_id', $tutor->id)
             ->where('status', 'accepted')
-            ->whereHas('appointment', function ($query) {
-                $query->where(function ($sub) {
-                    $sub->where('date', '>', now()->toDateString())
-                        ->orWhere(function ($q) {
-                            $q->where('date', now()->toDateString())
+            ->whereHas('appointment', function ($query1) { // in appointments zeit prüfen
+                $query1->where(function ($query2) {
+                    $query2->where('date', '>', now()->toDateString()) // datum liegt in Zukunft
+                        ->orWhere(function ($query3) {
+                            $query3->where('date', now()->toDateString()) // Das Ende liegt in Zukunft
                                 ->where('end', '>', now()->toTimeString());
                         });
                 });
@@ -88,23 +87,13 @@ class BookingController extends Controller
     }
 
     // Vergangene Termine
-    // TODO: später prüfen/testen
-    public function history(): JsonResponse
+    public function finished(): JsonResponse
     {
         $tutor = auth()->user();
 
         $bookings = Booking::where('tutor_id', $tutor->id)
-            ->where('status', 'accepted') // oder auch 'finished' wenn du es irgendwann setzen willst
-            ->whereHas('appointment', function ($query) {
-                $query->where(function ($q) {
-                    $q->where('date', '<', now()->toDateString())
-                        ->orWhere(function ($q2) {
-                            $q2->where('date', now()->toDateString())
-                                ->where('end', '<=', now()->toTimeString());
-                        });
-                });
-            })
-            ->with(['appointment', 'student'])
+            ->where('status', 'finished') // status wird automatisch bei aufrufen der pending appoint. geprüft und gesetzt
+            ->with(['appointment', 'appointment.lesson', 'student'])
             ->get();
 
         return response()->json($bookings);

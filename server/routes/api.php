@@ -43,6 +43,8 @@ Route::group(['middleware' => ['api','auth.jwt','auth.tutor']], function(){
     //Route::get('/tutor/appointments/done', [TutorAppointmentController::class, 'done']);
     Route::get('/tutor/bookings', [TutorBookingController::class, 'index']);
     Route::get('/tutor/bookings/pending', [TutorBookingController::class, 'pending']);
+    Route::get('/tutor/bookings/upcoming', [TutorBookingController::class, 'upcoming']);
+    Route::get('/tutor/bookings/finished', [TutorBookingController::class, 'finished']);
 });
 
 // admin
