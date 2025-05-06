@@ -9,8 +9,4 @@ use Illuminate\Http\Request;
 
 class AppointmentController extends Controller
 {
-    function index(): JsonResponse {
-        $appointments = Appointment::all();
-        return response()->json($appointments, 200);
-    }
 }

@@ -14,4 +14,9 @@ class AppointmentController extends Controller
         json($appointment, 200) : response()->
         json(null, 200);
     }
+
+    public function available(): JsonResponse {
+        $appointments = Appointment::where('status', 'available')->get();
+        return response()->json($appointments, 200);
+    }
 }
