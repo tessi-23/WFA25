@@ -3,7 +3,11 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
+use App\Models\Category;
+use App\Models\Lesson;
+use App\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -21,6 +25,16 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        //Gate::define('own-category', function (User $user, Category $category) {
+            //return $user->id === $category->user_id;
+        //});
+
+        // tutor
+        Gate::define('own-lesson', function (User $user, Lesson $lesson) {
+            return $user->role === 'tutor' && $user->id === $lesson->tutor_id;
+        });
+        Gate::define('own-appointment', function (User $user, Lesson $appointment) {
+            return $user->role === 'tutor' && $user->id === $appointment->lesson->tutor_id;
+        });
     }
 }
