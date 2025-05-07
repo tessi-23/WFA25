@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('categories', function (Blueprint $table) {
-            //
+            $table->string('title')->change();
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('categories', function (Blueprint $table) {
-            //
+            $table->enum('title', ['KWM', 'SE', 'MTD', 'HSD', 'DDP', 'DA', 'MBI', 'MC', 'SI'])->change();
         });
     }
 };
