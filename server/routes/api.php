@@ -50,6 +50,8 @@ Route::group(['middleware' => ['api','auth.jwt','auth.tutor']], function(){
     Route::get('/tutor/bookings/pending', [TutorBookingController::class, 'pending']);
     Route::get('/tutor/bookings/upcoming', [TutorBookingController::class, 'upcoming']);
     Route::get('/tutor/bookings/finished', [TutorBookingController::class, 'finished']);
+    Route::put('/tutor/bookings/{bookingId}/accept', [TutorBookingController::class, 'accept']);
+    Route::put('/tutor/bookings/{bookingId}/reject', [TutorBookingController::class, 'reject']);
 });
 
 // admin

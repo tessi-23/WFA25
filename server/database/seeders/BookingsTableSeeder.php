@@ -27,7 +27,7 @@ class BookingsTableSeeder extends Seeder
 
         // Booking für Vue Termin 2
         $booking2 = new Booking;
-        $booking2->status = 'accepted';
+        $booking2->status = 'pending';
         $booking2->comment = null;
         $booking2->appointment_id = 2; // Vue Termin 2
         $booking2->tutor_id = 1;

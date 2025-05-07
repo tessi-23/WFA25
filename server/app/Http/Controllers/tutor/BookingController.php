@@ -5,8 +5,10 @@ namespace App\Http\Controllers\tutor;
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
 use App\Models\Booking;
+use App\Models\Lesson;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class BookingController extends Controller
 {
@@ -35,34 +37,45 @@ class BookingController extends Controller
     }
 
     // Buchung annehmen
-    // TODO: später prüfen/testen
-    public function accept($id): JsonResponse {
-        $booking = Booking::findOrFail($id);
+    public function accept($bookingId): JsonResponse {
+        $booking = Booking::where('id', $bookingId)->first();
 
-        //$this->authorize('tutorBooking', $booking); // optional Gate/Policy
+        if($booking) {
+            if(!Gate::allows('own-booking', $booking)) {
+                return response()->json("User is not allowed to accept this booking request (no tutor)");
+            }
 
-        $booking->status = 'accepted';
-        $booking->save();
+            $booking->status = 'accepted';
+            $booking->save();
 
-        // Appointment auf 'booked' setzen (optional)
-        $booking->appointment->status = 'booked';
-        $booking->appointment->save();
+            $booking->appointment->status = 'booked';
+            $booking->appointment->save();
 
-        return response()->json(['message' => 'Booking accepted']);
+            return response()->json('booking (' .$bookingId .') accepted', 200);
+
+        } else {
+            return response()->json('booking (' .$bookingId .') not found', 404);
+        }
     }
 
     // Buchung ablehnen
-    // TODO: später prüfen/testen
-    public function reject($id): JsonResponse
+    public function reject($bookingId): JsonResponse
     {
-        $booking = Booking::findOrFail($id);
+        $booking = Booking::where('id', $bookingId)->first();
 
-        $this->authorize('tutorBooking', $booking);
+        if($booking) {
+            if(!Gate::allows('own-booking', $booking)) {
+                return response()->json("User is not allowed to accept this booking request (no tutor)");
+            }
 
-        $booking->status = 'rejected';
-        $booking->save();
+            $booking->status = 'rejected';
+            $booking->save();
 
-        return response()->json(['message' => 'Booking rejected']);
+            return response()->json('booking (' .$bookingId .') rejected', 200);
+
+        } else {
+            return response()->json('booking (' .$bookingId .') not found', 404);
+        }
     }
 
     // Anstehende gebuchte Termine
