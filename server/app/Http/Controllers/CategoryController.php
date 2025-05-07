@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class CategoryController extends Controller
@@ -29,6 +30,29 @@ class CategoryController extends Controller
             return response()->json('category (' .$categoryId .') deleted', 200);
         } else {
             return response()->json('category (' .$categoryId .') not found', 404);
+        }
+    }
+
+    // nur admin
+    public function store(Request $request): JsonResponse {
+        DB::beginTransaction(); // alle transactions in eine Warteschlange setzen
+
+        try {
+            $category = Category::create([
+                'title' => $request->title,
+                'description' => $request->description
+            ]);
+
+            if (!$category) {
+                throw new \Exception("category could not be created");
+            }
+
+            DB::commit();
+            return response()->json($category, 200);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(["error" => "saving category failed:  " . $e->getMessage()], 500);
         }
     }
 }

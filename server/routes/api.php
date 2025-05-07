@@ -38,9 +38,11 @@ Route::group(['middleware' => ['api','auth.jwt','auth.tutor']], function(){
     Route::get('/tutor/categories', [TutorCategoryController::class, 'index']);
 
     Route::get('/tutor/lessons', [TutorLessonController::class, 'index']);
+    Route::post('/tutor/lessons', [TutorLessonController::class, 'store']);
     Route::delete('/tutor/lessons/{lessonId}', [TutorLessonController::class, 'delete']);
 
     Route::get('/tutor/{lessonId}/appointments', [TutorAppointmentController::class, 'availableByLesson']);
+    Route::post('/tutor/appointments', [TutorAppointmentController::class, 'store']);
     Route::delete('/tutor/appointments/{appointmentId}', [TutorAppointmentController::class, 'delete']);
 
     Route::get('/tutor/bookings', [TutorBookingController::class, 'index']);
@@ -51,11 +53,12 @@ Route::group(['middleware' => ['api','auth.jwt','auth.tutor']], function(){
 
 // admin
 Route::group(['middleware' => ['api','auth.jwt','auth.admin']], function(){
-    Route::get('/categories', [CategoryController::class, 'index']);
+    Route::post('/categories', [CategoryController::class, 'store']);
     Route::delete('/categories/delete/{categoryId}', [CategoryController::class, 'delete']);
 });
 
 // general
+Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('appointments', [AppointmentController::class, 'available']);
 Route::get('/lessons', [LessonController::class, 'available']);
 Route::get('categories/{id}', [CategoryController::class, 'findByID']);
