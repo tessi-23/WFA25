@@ -7,6 +7,7 @@ use App\Models\Appointment;
 use App\Models\Lesson;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class AppointmentController extends Controller
 {
@@ -24,5 +25,15 @@ class AppointmentController extends Controller
             ->orderBy('start')
             ->get();
         return response()->json($appointments, 200);
+    }
+
+    public function delete(string $appointmentId):JsonResponse {
+        $appointment = Lesson::where('id', $appointmentId)->first();
+        if($appointment) { // wenn es dieses appoint. gibt
+            $appointment->delete();
+            return response()->json('appointment (' .$appointmentId .') deleted', 200);
+        } else {
+            return response()->json('appointment (' .$appointmentId .') not found', 404);
+        }
     }
 }

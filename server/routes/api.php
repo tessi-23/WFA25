@@ -38,8 +38,10 @@ Route::group(['middleware' => ['api','auth.jwt','auth.tutor']], function(){
     Route::get('/tutor/categories', [TutorCategoryController::class, 'index']);
 
     Route::get('/tutor/lessons', [TutorLessonController::class, 'index']);
+    Route::delete('/tutor/lessons/{lessonId}', [TutorLessonController::class, 'delete']);
 
     Route::get('/tutor/{lessonId}/appointments', [TutorAppointmentController::class, 'availableByLesson']);
+    Route::delete('/tutor/appointments/{appointmentId}', [TutorAppointmentController::class, 'delete']);
 
     Route::get('/tutor/bookings', [TutorBookingController::class, 'index']);
     Route::get('/tutor/bookings/pending', [TutorBookingController::class, 'pending']);
@@ -50,6 +52,7 @@ Route::group(['middleware' => ['api','auth.jwt','auth.tutor']], function(){
 // admin
 Route::group(['middleware' => ['api','auth.jwt','auth.admin']], function(){
     Route::get('/categories', [CategoryController::class, 'index']);
+    Route::delete('/categories/delete/{categoryId}', [CategoryController::class, 'delete']);
 });
 
 // general
