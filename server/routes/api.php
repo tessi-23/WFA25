@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\student\CategoryController as StudentCategoryController;
@@ -57,6 +58,9 @@ Route::group(['middleware' => ['api','auth.jwt','auth.admin']], function(){
     Route::delete('/categories/delete/{categoryId}', [CategoryController::class, 'delete']);
 });
 
+// student
+Route::post('/bookings', [BookingController::class, 'store']);
+
 // general
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('appointments', [AppointmentController::class, 'available']);
@@ -64,3 +68,5 @@ Route::get('/lessons', [LessonController::class, 'available']);
 Route::get('categories/{id}', [CategoryController::class, 'findByID']);
 Route::get('lessons/{id}', [LessonController::class, 'findByID']);
 Route::get('appointments/{id}', [AppointmentController::class, 'findByID']);
+
+
