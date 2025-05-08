@@ -55,4 +55,23 @@ class CategoryController extends Controller
             return response()->json(["error" => "saving category failed:  " . $e->getMessage()], 500);
         }
     }
+
+    // nur admin
+    function update(Request $request, string $categoryId): JsonResponse {
+        DB::beginTransaction();
+        try {
+            $category = Category::where('id', $categoryId)->first(); // aktuelle category
+            if($category) {
+                $category->update($request->all());
+                DB::commit();
+                return response()->json($category, 200);
+            } else {
+                return response()->json('category (' .$categoryId .') not found', 404);
+            }
+
+        } catch (\Exception $e) {
+            DB::rollBack(); // nichts wird gespeichert
+            return response()->json(["updating category failed: ". $e->getMessage()], 500);
+        }
+    }
 }

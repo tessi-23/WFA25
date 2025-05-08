@@ -57,11 +57,15 @@ Route::group(['middleware' => ['api','auth.jwt','auth.tutor']], function(){
 // admin
 Route::group(['middleware' => ['api','auth.jwt','auth.admin']], function(){
     Route::post('/categories', [CategoryController::class, 'store']);
+    Route::put('/categories/{categoryId}', [CategoryController::class, 'update']);
     Route::delete('/categories/delete/{categoryId}', [CategoryController::class, 'delete']);
 });
 
 // student
-Route::post('/bookings', [BookingController::class, 'store']);
+Route::group(['middleware' => ['api','auth.jwt','auth.student']], function(){
+    Route::post('/bookings', [BookingController::class, 'store']);
+});
+
 
 // general
 Route::get('/categories', [CategoryController::class, 'index']);
