@@ -12,8 +12,6 @@ use Illuminate\Support\Facades\Gate;
 
 class AppointmentController extends Controller
 {
-    // TODO: store (neuer Termin), update (bearbeiten), destroy (löschen)
-
     public function availableByLesson($lessonId): JsonResponse {
         $tutor = auth()->user(); // ruft authentifizierten Benutzer ab
         // nur appointments von aktuellem Tutor über lesson_id
@@ -42,6 +40,10 @@ class AppointmentController extends Controller
     }
 
     public function store(Request $request): JsonResponse {
+        // Uhrzeit und Datum prüfen
+        if (!$this->isFutureDateTime($request->date, $request->start)) {
+            return response()->json(["error" => "Appointment date and time must be in the future."], 400);
+        }
         $request = $this->parseRequest($request);
 
         DB::beginTransaction(); // alle transactions in eine Warteschlange setzen
@@ -71,6 +73,33 @@ class AppointmentController extends Controller
         }
     }
 
+    function update(Request $request, string $appointmentId): JsonResponse {
+        DB::beginTransaction();
+        try {
+            $appointment = Appointment::where('id', $appointmentId)->first();
+            if($appointment) {
+                if(!Gate::allows('own-appointment', $appointment)) {
+                    return response()->json("User is not allowed to update this appointment (no tutor)", 403);
+                }
+                // Uhrzeit und Datum prüfen
+                if (!$this->isFutureDateTime($request->date, $request->start)) {
+                    return response()->json(["error" => "Appointment date and time must be in the future."], 400);
+                }
+                $request = $this->parseRequest($request);
+
+                $appointment->update($request->all());
+                DB::commit();
+                return response()->json($appointment, 200);
+            } else {
+                return response()->json('appointment (' .$appointmentId .') not found', 404);
+            }
+
+        } catch (\Exception $e) {
+            DB::rollBack(); // nichts wird gespeichert
+            return response()->json(["updating appointment failed: ". $e->getMessage()], 500);
+        }
+    }
+
     private function parseRequest(Request $request): Request {
         $date = new \DateTime($request->date); // date Property in richtiges Format umwandeln
         $request['date'] = $date->format('Y-m-d');
@@ -79,7 +108,21 @@ class AppointmentController extends Controller
         $request['start'] = $start->format('H:i:s');
 
         $end = new \DateTime($request->end);
-        $request['start'] = $end->format('H:i:s');
+        $request['end'] = $end->format('H:i:s');
         return $request;
     }
+
+    // TODO: prüfen, funktioniert noch nicht
+    private function isFutureDateTime(string $date, string $time): bool {
+        $dateTimeString = "$date $time"; // Datum und Zeit kombinieren
+        $timestamp = strtotime($dateTimeString); // timestamp erzeugen
+        if ($timestamp === false) {
+            throw new \Exception("Invalid date or time format");
+        }
+        if ($timestamp <= time()) {
+            throw new \Exception("Date and time cannot be in the past or the present.");
+        }
+        return true;
+    }
+
 }

@@ -63,4 +63,26 @@ class LessonController extends Controller
             return response()->json(["error" => "saving lesson failed:  " . $e->getMessage()], 500);
         }
     }
+
+    function update(Request $request, string $lessonId): JsonResponse {
+        DB::beginTransaction();
+        try {
+            $lesson = Lesson::where('id', $lessonId)->first();
+            if($lesson) {
+                if(!Gate::allows('own-lesson', $lesson)) {
+                    return response()->json("User is not allowed to update this lesson (no tutor)", 403);
+                }
+
+                $lesson->update($request->all());
+                DB::commit();
+                return response()->json($lesson, 200);
+            } else {
+                return response()->json('lesson (' .$lessonId .') not found', 404);
+            }
+
+        } catch (\Exception $e) {
+            DB::rollBack(); // nichts wird gespeichert
+            return response()->json(["updating lesson failed: ". $e->getMessage()], 500);
+        }
+    }
 }

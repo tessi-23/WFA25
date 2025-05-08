@@ -40,10 +40,12 @@ Route::group(['middleware' => ['api','auth.jwt','auth.tutor']], function(){
 
     Route::get('/tutor/lessons', [TutorLessonController::class, 'index']);
     Route::post('/tutor/lessons', [TutorLessonController::class, 'store']);
+    Route::put('/tutor/lessons/{lessonId}', [TutorLessonController::class, 'update']);
     Route::delete('/tutor/lessons/{lessonId}', [TutorLessonController::class, 'delete']);
 
     Route::get('/tutor/{lessonId}/appointments', [TutorAppointmentController::class, 'availableByLesson']);
     Route::post('/tutor/appointments', [TutorAppointmentController::class, 'store']);
+    Route::put('/tutor/appointments/{appointmentId}', [TutorAppointmentController::class, 'update']);
     Route::delete('/tutor/appointments/{appointmentId}', [TutorAppointmentController::class, 'delete']);
 
     Route::get('/tutor/bookings', [TutorBookingController::class, 'index']);
