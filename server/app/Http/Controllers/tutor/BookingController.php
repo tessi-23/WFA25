@@ -28,6 +28,22 @@ class BookingController extends Controller
     public function pending(): JsonResponse {
         $tutor = auth()->user();
 
+        // TODO: prüfen
+        $expiredAppointments = Appointment::where('date', '<', now()->toDateString())
+            ->orWhere(function ($query) {
+                $query->where('date', '=', now()->toDateString())
+                    ->where('start', '<=', now()->toTimeString());
+            })->get();
+
+        foreach ($expiredAppointments as $appointment) {
+            // Wenn gebucht, vorher die Bookings löschen
+            if ($appointment->status === 'booked') {
+                Booking::where('appointment_id', $appointment->id)->delete();
+            }
+            // Danach das Appointment selbst löschen
+            $appointment->delete();
+        }
+
         $bookings = Booking::where('tutor_id', $tutor->id)
             ->where('status', 'pending')
             ->with(['appointment', 'appointment.lesson', 'student'])
@@ -91,6 +107,7 @@ class BookingController extends Controller
         foreach ($bookings as $booking) {
             $appointment = $booking->appointment; // entsprechender Termin pro Buchung
 
+            // TODO: prüfen, funktioniert evtl. noch nicht?
             // wenn Termin abgelaufen status auf finished setzen
             if ($appointment->date < now()->toDateString() ||
                 $appointment->date == now()->toDateString() && $appointment->start < now()->toTimeString()) {

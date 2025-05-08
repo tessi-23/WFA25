@@ -12,7 +12,18 @@ use Illuminate\Support\Facades\Gate;
 
 class AppointmentController extends Controller
 {
+    // TODO: prüfen
     public function availableByLesson($lessonId): JsonResponse {
+
+        $expiredAppointments = Appointment::where('date', '<', now()->toDateString())
+            ->orWhere(function ($query) {
+                $query->where('date', '=', now()->toDateString())
+                    ->where('start', '<=', now()->toTimeString());
+            })->get();
+        foreach ($expiredAppointments as $appointment) {
+            $appointment->delete(); // Termin direkt löschen
+        }
+
         $tutor = auth()->user(); // ruft authentifizierten Benutzer ab
         // nur appointments von aktuellem Tutor über lesson_id
         $appointments = Appointment::where('status', 'available')
@@ -55,7 +66,7 @@ class AppointmentController extends Controller
                 'date' => $request->date,
                 'start' => $request->start,
                 'end' => $request->end,
-                'status' => 'available', // TODO: richtig so manuell zu setzen?
+                'status' => 'available',
                 'price' => $request->price,
                 'lesson_id' => $request->lesson_id,
             ]);
@@ -114,15 +125,16 @@ class AppointmentController extends Controller
 
     // TODO: prüfen, funktioniert noch nicht
     private function isFutureDateTime(string $date, string $time): bool {
-        $dateTimeString = "$date $time"; // Datum und Zeit kombinieren
-        $timestamp = strtotime($dateTimeString); // timestamp erzeugen
-        if ($timestamp === false) {
-            throw new \Exception("Invalid date or time format");
+        try {
+            // Kombiniere Datum und Zeit in ein DateTime-Objekt
+            $inputDateTime = new \DateTime("$date $time");
+            $now = new \DateTime();
+
+            // Nutze den Timestamp-Vergleich
+            return $inputDateTime->getTimestamp() > $now->getTimestamp();
+        } catch (\Exception $e) {
+            throw new \Exception("Invalid date or time format: " . $e->getMessage());
         }
-        if ($timestamp <= time()) {
-            throw new \Exception("Date and time cannot be in the past or the present.");
-        }
-        return true;
     }
 
 }
