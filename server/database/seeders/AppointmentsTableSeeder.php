@@ -46,7 +46,7 @@ class AppointmentsTableSeeder extends Seeder
         $appointment3->date = '2025-05-01';
         $appointment3->start = '09:00:00';
         $appointment3->end = '11:00:00';
-        $appointment3->status = 'done';
+        $appointment3->status = 'booked';
         $appointment3->price = 10;
         $appointment3->lesson_id = 2; // JavaScript
         $appointment3->created_at = date("Y-m-d H:i:s");
