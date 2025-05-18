@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\tutor;
 
 use App\Http\Controllers\Controller;
+use App\Models\Appointment;
 use App\Models\Lesson;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -55,6 +56,20 @@ class LessonController extends Controller
                 throw new \Exception("lesson could not be created");
             }
 
+            if (isset($request['appointments']) && is_array($request['appointments'])) {
+                foreach ($request['appointments'] as $appData) {
+                    $appointment = new Appointment();
+                    $appointment->title = $appData['title'];
+                    $appointment->date = $appData['date'];
+                    $appointment->start = $appData['start'];
+                    $appointment->end = $appData['end'];
+                    $appointment->status = 'available';
+                    $appointment->price = $appData['price'];
+                    $appointment->lesson_id = $lesson->id;
+                    $lesson->appointments()->save($appointment);
+                }
+            }
+
             DB::commit();
             return response()->json($lesson, 200);
 
@@ -74,6 +89,24 @@ class LessonController extends Controller
                 }
 
                 $lesson->update($request->all());
+
+                // zugehörige appointments löschen und neu speichern
+                $lesson->appointments()->delete();
+
+                if (isset($request['appointments']) && is_array($request['appointments'])) {
+                    foreach ($request['appointments'] as $appData) {
+                        $appointment = new Appointment();
+                        $appointment->title = $appData['title'];
+                        $appointment->date = $appData['date'];
+                        $appointment->start = $appData['start'];
+                        $appointment->end = $appData['end'];
+                        $appointment->status = 'available';
+                        $appointment->price = $appData['price'];
+                        $appointment->lesson_id = $lesson->id;
+                        $lesson->appointments()->save($appointment);
+                    }
+                }
+
                 DB::commit();
                 return response()->json($lesson, 200);
             } else {
