@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class LessonController extends Controller
 {
-    function availableByID(string $categoryId): JsonResponse {
+    public function availableByID(string $categoryId): JsonResponse {
         $lessons = Lesson::with('tutor')
         ->with('appointments')
         ->where('category_id', $categoryId)
@@ -18,6 +18,7 @@ class LessonController extends Controller
         ->get();
         return response()->json($lessons, 200);
     }
+
     public function findByID(string $id): JsonResponse {
         $lesson = Lesson::where('id', $id)->first();
         return $lesson != null ? response()->

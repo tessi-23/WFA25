@@ -38,7 +38,7 @@ Route::post('auth/logout', [AuthController::class,'logout']);
 Route::group(['middleware' => ['api','auth.jwt','auth.tutor']], function(){
     Route::get('/tutor/categories', [TutorCategoryController::class, 'index']);
 
-    Route::get('/tutor/lessons', [TutorLessonController::class, 'index']);
+    Route::get('/tutor/categories/lessons/{categoryId}', [TutorLessonController::class, 'availableByID']);
     Route::post('/tutor/lessons', [TutorLessonController::class, 'store']);
     Route::put('/tutor/lessons/{lessonId}', [TutorLessonController::class, 'update']);
     Route::delete('/tutor/lessons/{lessonId}', [TutorLessonController::class, 'delete']);
