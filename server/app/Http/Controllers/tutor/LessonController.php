@@ -15,11 +15,13 @@ class LessonController extends Controller
     public function availableByID(string $categoryId): JsonResponse {
         $tutor = auth()->user(); // ruft authentifizierten Benutzer ab
         $lessons = Lesson::where('tutor_id', $tutor->id) // eingeloggter tutor
-            ->with('appointments')
             ->where('category_id', $categoryId)
             ->whereHas('appointments', function ($query) { // lesson hat mind. ein verfügbares appoint.
                 $query->where('status', 'available');
             })
+            ->with(['appointments' => function ($query) { // Verfügbare Appointments laden
+                $query->where('status', 'available');
+            }])
             ->withCount(['appointments' => function ($query) use ($tutor) {
                 $query->where('tutor_id', $tutor->id); // Anzahl appointments
             }])
