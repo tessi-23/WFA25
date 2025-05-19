@@ -10,8 +10,10 @@ class LessonController extends Controller
 {
     public function availableByID(string $categoryId): JsonResponse {
         $lessons = Lesson::with('tutor')
-        ->with('appointments')
-        ->where('category_id', $categoryId)
+            ->with(['appointments' => function ($query) {
+                $query->where('status', 'available');
+            }])
+            ->where('category_id', $categoryId)
         ->whereHas('appointments', function ($query) {
                 $query->where('status', 'available');
         })

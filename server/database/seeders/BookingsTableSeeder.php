@@ -15,15 +15,15 @@ class BookingsTableSeeder extends Seeder
     public function run(): void
     {
         // Booking für Vue Termin 1
-        $booking1 = new Booking;
-        $booking1->status = 'rejected';
-        $booking1->comment = 'Geht auch der 10.Mai?';
-        $booking1->appointment_id = 1; // Vue Termin 1
-        $booking1->tutor_id = 1;
-        $booking1->student_id = 4;
-        $booking1->created_at = date("Y-m-d H:i:s");
-        $booking1->updated_at = date("Y-m-d H:i:s");
-        $booking1->save();
+        //$booking1 = new Booking;
+        //$booking1->status = 'rejected';
+        //$booking1->comment = 'Geht auch der 10.Juni?';
+        //$booking1->appointment_id = 1; // Vue Einführung
+        //$booking1->tutor_id = 1;
+        //$booking1->student_id = 4;
+        //$booking1->created_at = date("Y-m-d H:i:s");
+        //$booking1->updated_at = date("Y-m-d H:i:s");
+        //$booking1->save();
 
         // Booking für Vue Termin 2
         $booking2 = new Booking;

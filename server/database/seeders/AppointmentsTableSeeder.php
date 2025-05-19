@@ -17,7 +17,7 @@ class AppointmentsTableSeeder extends Seeder
         // Vue Termin 1
         $appointment1 = new Appointment;
         $appointment1->title = 'Vue Einführung';
-        $appointment1->date = '2025-05-10';
+        $appointment1->date = '2025-06-10';
         $appointment1->start = '10:00:00';
         $appointment1->end = '12:00:00';
         $appointment1->status = 'available';
@@ -30,7 +30,7 @@ class AppointmentsTableSeeder extends Seeder
         // Vue Termin 2
         $appointment2 = new Appointment;
         $appointment2->title = 'Vue Fortgeschrittene Themen';
-        $appointment2->date = '2025-05-17';
+        $appointment2->date = '2025-06-17';
         $appointment2->start = '14:00:00';
         $appointment2->end = '16:00:00';
         $appointment2->status = 'booked';
@@ -56,10 +56,10 @@ class AppointmentsTableSeeder extends Seeder
         // JavaScript Termin 2
         $appointment4 = new Appointment;
         $appointment4->title = 'JavaScript Fortgeschrittene Themen';
-        $appointment4->date = '2025-05-19';
+        $appointment4->date = '2025-06-19';
         $appointment4->start = '15:00:00';
         $appointment4->end = '17:00:00';
-        $appointment4->status = 'booked';
+        $appointment4->status = 'available';
         $appointment4->price = 20;
         $appointment4->lesson_id = 2; // JavaScript
         $appointment4->created_at = date("Y-m-d H:i:s");
@@ -69,7 +69,7 @@ class AppointmentsTableSeeder extends Seeder
         // C# Termin 1
         $appointment5 = new Appointment;
         $appointment5->title = 'C# Grundlagen';
-        $appointment5->date = '2025-05-15';
+        $appointment5->date = '2025-06-15';
         $appointment5->start = '13:00:00';
         $appointment5->end = '14:00:00';
         $appointment5->status = 'available';
@@ -82,7 +82,7 @@ class AppointmentsTableSeeder extends Seeder
         // Blender Termin 1
         $appointment6 = new Appointment;
         $appointment6->title = 'Blender Einführung';
-        $appointment6->date = '2025-05-20';
+        $appointment6->date = '2025-06-20';
         $appointment6->start = '11:00:00';
         $appointment6->end = '13:00:00';
         $appointment6->status = 'available';
