@@ -37,5 +37,13 @@ class CategoriesTableSeeder extends Seeder
         $category3->created_at = date("Y-m-d H:i:s");
         $category3->updated_at = date("Y-m-d H:i:s");
         $category3->save();
+
+        // Kategorie 4: HSD
+        $category4 = new Category;
+        $category4->title = 'HSD';
+        $category4->description = 'Hardware- Software Design';
+        $category4->created_at = date("Y-m-d H:i:s");
+        $category4->updated_at = date("Y-m-d H:i:s");
+        $category4->save();
     }
 }

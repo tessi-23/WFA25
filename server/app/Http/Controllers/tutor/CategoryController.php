@@ -11,10 +11,7 @@ class CategoryController extends Controller
 {
     public function index(): JsonResponse {
         $tutor = auth()->user(); // ruft authentifizierten Benutzer ab
-        $categories = Category::whereHas('lessons', function ($query) use ($tutor) {
-                $query->where('tutor_id', $tutor->id); // category mit mind. einer verfügbaren lesson
-            })
-            ->withCount(['lessons' => function ($query) use ($tutor) { // Anzahl der lessons
+        $categories = Category::withCount(['lessons' => function ($query) use ($tutor) { // Anzahl der lessons
                 $query->where('tutor_id', $tutor->id);
             }])
             ->get();
