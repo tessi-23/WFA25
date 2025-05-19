@@ -71,10 +71,10 @@ Route::group(['middleware' => ['api','auth.jwt','auth.student']], function(){
 
 // general
 Route::get('/categories', [CategoryController::class, 'index']);
-Route::get('appointments', [AppointmentController::class, 'available']);
-Route::get('/lessons', [LessonController::class, 'available']);
-Route::get('categories/{id}', [CategoryController::class, 'findByID']);
-Route::get('lessons/{id}', [LessonController::class, 'findByID']);
-Route::get('appointments/{id}', [AppointmentController::class, 'findByID']);
+Route::get('/appointments', [AppointmentController::class, 'available']);
+Route::get('/categories/lessons/{id}', [LessonController::class, 'availableByID']);
+Route::get('/categories/{id}', [CategoryController::class, 'findByID']);
+Route::get('/lessons/{id}', [LessonController::class, 'findByID']);
+Route::get('/appointments/{id}', [AppointmentController::class, 'findByID']);
 
 
