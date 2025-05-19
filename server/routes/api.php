@@ -66,6 +66,7 @@ Route::group(['middleware' => ['api','auth.jwt','auth.admin']], function(){
 // student
 Route::group(['middleware' => ['api','auth.jwt','auth.student']], function(){
     Route::post('/bookings', [BookingController::class, 'store']);
+    Route::get('/student/categories/lessons/{categoryId}', [StudentLessonController::class, 'availableByID']);
 });
 
 
