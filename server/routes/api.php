@@ -10,6 +10,7 @@ use App\Http\Controllers\student\LessonController as StudentLessonController;
 use App\Http\Controllers\tutor\LessonController as TutorLessonController;
 use App\Http\Controllers\tutor\AppointmentController as TutorAppointmentController;
 use App\Http\Controllers\tutor\BookingController as TutorBookingController;
+use App\Http\Controllers\student\BookingController as StudentBookingController;
 use App\Http\Controllers\tutor\CategoryController as TutorCategoryController;
 use App\Http\Controllers\student\AppointmentController as StudentAppointmentController;
 use Illuminate\Http\Request;
@@ -67,6 +68,7 @@ Route::group(['middleware' => ['api','auth.jwt','auth.admin']], function(){
 Route::group(['middleware' => ['api','auth.jwt','auth.student']], function(){
     Route::post('/bookings', [BookingController::class, 'store']);
     Route::get('/student/categories/lessons/{categoryId}', [StudentLessonController::class, 'availableByID']);
+    Route::get('/student/bookings/pending', [StudentBookingController::class, 'pending']);
 });
 
 

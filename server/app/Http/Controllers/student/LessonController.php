@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class LessonController extends Controller {
-    // TODO: wsl unnötig
+    // TODO: status auf pending setzen
     public function availableByID(string $categoryId): JsonResponse {
         $studentId = auth()->id();
 
