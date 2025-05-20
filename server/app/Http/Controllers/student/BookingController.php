@@ -36,4 +36,44 @@ class BookingController extends Controller {
 
         return response()->json($bookings);
     }
+
+    // Anstehende gebuchte Termine
+    public function upcoming(): JsonResponse {
+        $student = auth()->user();
+
+        $bookings = Booking::where('student_id', $student->id)
+            ->where('status', 'accepted')
+            ->with(['appointment', 'tutor'])
+            ->get();
+
+
+        foreach ($bookings as $booking) {
+            $appointment = $booking->appointment; // entsprechender Termin pro Buchung
+
+            // TODO: prüfen, funktioniert evtl. noch nicht?
+            // wenn Termin abgelaufen status auf finished setzen
+            if ($appointment->date < now()->toDateString() ||
+                $appointment->date == now()->toDateString() && $appointment->start < now()->toTimeString()) {
+                $booking->status = 'finished';
+                $booking->save();
+            }
+        }
+
+        // jetzt alle zukünftigen accepted Buchungen heraussuchen
+        $upcomingBookings = Booking::where('student_id', $student->id)
+            ->where('status', 'accepted')
+            ->whereHas('appointment', function ($query1) { // in appointments zeit prüfen
+                $query1->where(function ($query2) {
+                    $query2->where('date', '>', now()->toDateString()) // datum liegt in Zukunft
+                    ->orWhere(function ($query3) {
+                        $query3->where('date', now()->toDateString()) // Das Ende liegt in Zukunft
+                        ->where('end', '>', now()->toTimeString());
+                    });
+                });
+            })
+            ->with(['appointment', 'tutor'])
+            ->get();
+
+        return response()->json($upcomingBookings);
+    }
 }
