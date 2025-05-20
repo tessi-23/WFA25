@@ -14,6 +14,19 @@ class LessonController extends Controller
 {
     public function availableByID(string $categoryId): JsonResponse {
         $tutor = auth()->user(); // ruft authentifizierten Benutzer ab
+
+        // alte app. löschen
+        Appointment::where('status', 'available')
+            ->where(function ($query) {
+                $query->where('date', '<', now()->toDateString())
+                    ->orWhere(function ($q) {
+                        $q->where('date', now()->toDateString())
+                            ->where('start', '<=', now()->toTimeString());
+                    });
+            })
+            ->doesntHave('booking')
+            ->delete();
+
         $lessons = Lesson::where('tutor_id', $tutor->id) // eingeloggter tutor
             ->where('category_id', $categoryId)
             ->whereHas('appointments', function ($query) { // lesson hat mind. ein verfügbares appoint.
@@ -26,26 +39,6 @@ class LessonController extends Controller
                 $query->where('tutor_id', $tutor->id); // Anzahl appointments
             }])
             ->get();
-
-        $expiredAppointments = Appointment::where('date', '<', now()->toDateString())
-            ->orWhere(function ($query) {
-                $query->where('date', '=', now()->toDateString())
-                    ->where('start', '<=', now()->toTimeString());
-            })->get();
-
-        foreach ($expiredAppointments as $appointment) {
-            // abgelaufene app.löschen
-            //if ($appointment->status === 'booked') {
-            //    Booking::where('appointment_id', $appointment->id)->delete();
-            //}
-            $appointment->delete();
-        }
-
-        // neue lessons erstellen ohne die gelöschten appointments
-        $lessons = $lessons->map(function ($lesson) {
-            $lesson->setRelation('appointments', $lesson->appointments->filter());
-            return $lesson;
-        });
 
         return response()->json($lessons, 200);
     }

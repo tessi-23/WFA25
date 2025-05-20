@@ -53,5 +53,15 @@ class LessonsTableSeeder extends Seeder
         $lesson4->created_at = date("Y-m-d H:i:s");
         $lesson4->updated_at = date("Y-m-d H:i:s");
         $lesson4->save();
+
+        // Lesson 5: E-Learning
+        $lesson5 = new Lesson;
+        $lesson5->title = 'E-Leraning';
+        $lesson5->description = 'Grundlagen im E-Learning';
+        $lesson5->tutor_id = 1;
+        $lesson5->category_id = 1;
+        $lesson5->created_at = date("Y-m-d H:i:s");
+        $lesson5->updated_at = date("Y-m-d H:i:s");
+        $lesson5->save();
     }
 }

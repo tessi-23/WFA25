@@ -70,6 +70,7 @@ Route::group(['middleware' => ['api','auth.jwt','auth.student']], function(){
     Route::get('/student/categories/lessons/{categoryId}', [StudentLessonController::class, 'availableByID']);
     Route::get('/student/bookings/pending', [StudentBookingController::class, 'pending']);
     Route::get('/student/bookings/upcoming', [StudentBookingController::class, 'upcoming']);
+    Route::get('/student/bookings/finished', [StudentBookingController::class, 'finished']);
 });
 
 

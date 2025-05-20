@@ -92,5 +92,18 @@ class AppointmentsTableSeeder extends Seeder
         $appointment6->updated_at = date("Y-m-d H:i:s");
         $appointment6->save();
 
+        // E-Learning Termin 1
+        $appointment7 = new Appointment;
+        $appointment7->title = 'E-Learning Basics';
+        $appointment7->date = '2025-04-01';
+        $appointment7->start = '11:00:00';
+        $appointment7->end = '18:00:00';
+        $appointment7->status = 'booked';
+        $appointment7->price = 35;
+        $appointment7->lesson_id = 5; // E Learning
+        $appointment7->created_at = date("Y-m-d H:i:s");
+        $appointment7->updated_at = date("Y-m-d H:i:s");
+        $appointment7->save();
+
     }
 }

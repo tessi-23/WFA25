@@ -29,23 +29,23 @@ class BookingController extends Controller
         $tutor = auth()->user();
 
         // TODO: prüfen
-        $expiredAppointments = Appointment::where('date', '<', now()->toDateString())
-            ->orWhere(function ($query) {
-                $query->where('date', '=', now()->toDateString())
-                    ->where('start', '<=', now()->toTimeString());
-            })->get();
+        $expiredAppointments = Appointment::where('status', 'available')
+            ->where(function ($query) {
+                $query->where('date', '<', now()->toDateString())
+                        ->orWhere(function ($query) {
+                            $query->where('date', '=', now()->toDateString())
+                                ->where('start', '<=', now()->toTimeString());
+                        });
+            })
+            ->doesntHave('booking') // app. hat keine zugehörigen bookings
+            ->get();
 
         foreach ($expiredAppointments as $appointment) {
-            // Wenn gebucht, vorher die Bookings löschen
-            if ($appointment->status === 'booked') {
-                Booking::where('appointment_id', $appointment->id)->delete();
-            }
-            // Danach das Appointment selbst löschen
             $appointment->delete();
         }
 
         $bookings = Booking::where('tutor_id', $tutor->id)
-            ->where('status', 'pending')
+            ->whereIn('status', ['pending', 'rejected']) // status pending oder rejected
             ->with(['appointment', 'appointment.lesson', 'student'])
             ->get();
 
