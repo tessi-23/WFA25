@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\student;
 
 use App\Http\Controllers\Controller;
+use App\Models\Appointment;
 use App\Models\Lesson;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -27,6 +28,26 @@ class LessonController extends Controller {
                     });
             })
             ->get();
+
+        $expiredAppointments = Appointment::where('date', '<', now()->toDateString())
+            ->orWhere(function ($query) {
+                $query->where('date', '=', now()->toDateString())
+                    ->where('start', '<=', now()->toTimeString());
+            })->get();
+
+        foreach ($expiredAppointments as $appointment) {
+            // abgelaufene app.löschen
+            //if ($appointment->status === 'booked') {
+            //    Booking::where('appointment_id', $appointment->id)->delete();
+            //}
+            $appointment->delete();
+        }
+
+        // neue lessons erstellen ohne die gelöschten appointments
+        $lessons = $lessons->map(function ($lesson) {
+            $lesson->setRelation('appointments', $lesson->appointments->filter());
+            return $lesson;
+        });
 
         return response()->json($lessons, 200);
     }
