@@ -22,7 +22,7 @@ class LessonController extends Controller
     }
 
     public function findByID(string $id): JsonResponse {
-        $lesson = Lesson::where('id', $id)->first();
+        $lesson = Lesson::with('appointments')->where('id', $id)->first();
         return $lesson != null ? response()->
         json($lesson, 200) : response()->
         json(null, 200);
