@@ -52,32 +52,31 @@ class UsersTableSeeder extends Seeder
         $tutor3->password = bcrypt('secret');
         $tutor3->save();
 
-//        $tutor4 = new User;
-//        $tutor4->firstname = 'Sebastian';
-//        $tutor4->lastname = 'Krenn';
-//        $tutor4->phone = '06641234567';
-//        $tutor4->age = 32;
-//        $tutor4->gender = 'male';
-//        $tutor4->qualification = 'BSc KWM';
-//        $tutor4->role = 'tutor';
-//        $tutor4->description = 'Biete Nachhilfe in JavaScript.';
-//        $tutor4->email = 'sebastian.krenn@example.com';
-//        $tutor4->password = bcrypt('secret');
-//        $tutor4->save();
+        $student1 = new User;
+        $student1->firstname = 'Jonas';
+        $student1->lastname = 'Fischer';
+        $student1->phone = '06801234567';
+        $student1->age = 21;
+        $student1->gender = 'male';
+        $student1->qualification = 'Student BA KWM';
+        $student1->role = 'student';
+        $student1->description = 'Suche Nachhilfe in Vue';
+        $student1->email = 'jonas.fischer@example.com';
+        $student1->password = bcrypt('secret');
+        $student1->save();
 
-
-        $student = new User;
-        $student->firstname = 'Jonas';
-        $student->lastname = 'Fischer';
-        $student->phone = '06801234567';
-        $student->age = 21;
-        $student->gender = 'male';
-        $student->qualification = 'Student BA KWM';
-        $student->role = 'student';
-        $student->description = 'Suche Nachhilfe in Vue';
-        $student->email = 'jonas.fischer@example.com';
-        $student->password = bcrypt('secret');
-        $student->save();
+        $student2 = new User;
+        $student2->firstname = 'Marlene';
+        $student2->lastname = 'Sahne';
+        $student2->phone = '0680124447';
+        $student2->age = 30;
+        $student2->gender = 'female';
+        $student2->qualification = 'Student BA MTD';
+        $student2->role = 'student';
+        $student2->description = 'Suche Nachhilfe für MTD Fächer';
+        $student2->email = 'marlene.sahne@example.com';
+        $student2->password = bcrypt('secret');
+        $student2->save();
 
         $admin = new User;
         $admin->firstname = 'Admin';

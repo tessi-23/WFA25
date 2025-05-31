@@ -14,7 +14,7 @@ class LessonController extends Controller
                 $query->where('status', 'available');
             }])
             ->where('category_id', $categoryId)
-        ->whereHas('appointments', function ($query) {
+            ->whereHas('appointments', function ($query) {
                 $query->where('status', 'available');
         })
         ->get();

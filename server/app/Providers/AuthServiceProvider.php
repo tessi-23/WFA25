@@ -35,11 +35,9 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('own-lesson', function (User $user, Lesson $lesson) {
             return $user->role === 'tutor' && $user->id === $lesson->tutor_id;
         });
-        // TODO: checken ob korrekt
         Gate::define('own-appointment', function (User $user, Appointment $appointment) {
             return $user->role === 'tutor' && $user->id === $appointment->lesson->tutor_id;
         });
-        // TODO: checken ob korrekt
         Gate::define('own-booking', function (User $user, Booking $booking) {
             return $user->role === 'tutor' && $user->id === $booking->appointment->lesson->tutor_id;
         });
