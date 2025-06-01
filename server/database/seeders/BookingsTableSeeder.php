@@ -18,7 +18,7 @@ class BookingsTableSeeder extends Seeder
         $booking1 = new Booking;
         $booking1->status = 'finished';
         $booking1->comment = 'Geht auch der 10.April?';
-        $booking1->appointment_id = 7; // E-Learning
+        $booking1->appointment_id = 1; // E-Learning
         $booking1->tutor_id = 1;
         $booking1->student_id = 4;
         $booking1->created_at = date("Y-m-d H:i:s");

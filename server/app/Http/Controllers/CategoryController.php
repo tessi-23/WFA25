@@ -11,7 +11,18 @@ use Illuminate\Support\Facades\Gate;
 class CategoryController extends Controller
 {
     function index(): JsonResponse {
-        $categories = Category::with('lessons')->whereHas('lessons')->get();
+        $categories = Category::whereHas('lessons', function ($q) {
+            $q->whereHas('appointments', function ($q2) {
+                $q2->where('status', 'available');
+            });
+        })
+        ->with(['lessons' => function ($q) {
+            $q->whereHas('appointments', function ($q2) {
+                $q2->where('status', 'available');
+            });
+        }])
+        ->get();
+
         return response()->json($categories, 200);
     }
 
