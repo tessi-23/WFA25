@@ -1,0 +1,9 @@
+<bs-appointment-list
+  [appointments]="requests()"
+  type="request"
+  [role]="authService.getRole()"
+  (accept)="acceptBookingRequest($event)"
+  (reject)="rejectBookingRequest($event)">
+</bs-appointment-list>
+
+

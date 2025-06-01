@@ -1,0 +1,38 @@
+<form
+  [formGroup]="loginForm"
+  class="flex flex-col gap-4 p-6 w-full max-w-2xl"
+  (ngSubmit)="login()"
+>
+  <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-1">
+      <label class="font-bold text-text-color" for="email">email</label>
+      <input pInputText
+        id="email"
+        type="text"
+        formControlName="email"
+      />
+      @if (
+          loginForm.controls["email"].hasError("required") &&
+          loginForm.controls["email"].dirty
+        ) {
+        <p-message severity="error" variant="simple" size="small">Please enter your email</p-message>
+      }
+    </div>
+    <div class="flex flex-col gap-1">
+      <label class="font-bold text-text-color" for="password">Passwort</label>
+      <input pInputText
+        id="password"
+        type="password"
+        formControlName="password"
+      />
+      @if (
+          loginForm.controls["password"].hasError("required") &&
+          loginForm.controls["password"].dirty
+        ) {
+        <p-message severity="error" variant="simple" size="small">Please enter your password</p-message>
+      }
+    </div>
+  </div>
+  <p-button label="Login" icon="pi pi-user" type="submit" [disabled]="loginForm.invalid"></p-button>
+</form>
+<p-toast></p-toast>

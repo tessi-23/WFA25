@@ -1,0 +1,75 @@
+@if (authService.getRole() === 'tutor') {
+  <p-button label="Create Lesson" [routerLink]="'form'"></p-button>
+}
+
+<p-button class="pl-4" label="Back to Courses" [routerLink]="'/categories'"></p-button>
+<div class="card">
+  <p-accordion [value]="['0']" [multiple]="true">
+    @for (lesson of lessons(); track lesson.title) {
+      <p-accordion-panel [value]="lesson.id">
+        <p-accordion-header>
+          {{ lesson.title }}
+          @if (authService.getRole() !== 'tutor') {
+            <p-button (click)="showInfoDialog()" icon="pi pi-info" [rounded]="true" severity="secondary" />
+            <p-dialog header="{{ lesson.title }}"
+                      [modal]="true" [(visible)]="visibleInfoModal" [style]="{ width: '25rem' }">
+              <span class="p-text-secondary block mb-8">{{ lesson.description }}</span>
+            </p-dialog>
+            <p-button (click)="showTutorDialog()" icon="pi pi-user" [rounded]="true" severity="secondary" />
+            <p-dialog header="{{ lesson.tutor.firstname }} {{ lesson.tutor.lastname }} ({{ lesson.tutor.age }})"
+                      [modal]="true" [(visible)]="visibleTutorModal" [style]="{ width: '25rem' }">
+            <span class="p-text-secondary block mb-8">
+              {{ lesson.tutor.email }} <br>
+              {{ lesson.tutor.phone }} <br>
+              {{ lesson.tutor.qualification }} <br>
+              {{ lesson.tutor.description }} <br>
+            </span>
+            </p-dialog>
+          } @else {
+            <p-button icon="pi pi-pencil" [rounded]="true" severity="secondary"
+              [routerLink]="['form', lesson.id]">
+            </p-button>
+          }
+        </p-accordion-header>
+        <p-accordion-content>
+          @for (appointment of lesson.appointments; track appointment.id) {
+            <div class="border-solid border-2 rounded-2xl border-amber-100 p-4 mb-4
+            flex flex-row justify-between gap-2">
+              <div>
+                {{ appointment.title }} <br>
+                {{ appointment.date}} <br>
+                {{ appointment.start }} {{ appointment.end}}<br>
+                {{ appointment.price }} € <br>
+                {{ appointment.status }}
+              </div>
+              @if (authService.getRole() === 'tutor') {
+                <p-button
+                  (click)="confirmDeleteAppointment(lesson.id, appointment.id, $event)"
+                  icon="pi pi-trash" [rounded]="true" severity="danger">
+                </p-button>
+              } @else if (authService.getRole() === 'student') {
+                <p-button
+                  label="Send booking request"
+                  (click)="confirmSendBookingRequest(lesson, appointment.id, $event)">
+                </p-button>
+              }
+            </div>
+          }
+        </p-accordion-content>
+      </p-accordion-panel>
+    }
+  </p-accordion>
+</div>
+<p-confirm-dialog key="booking">
+  <ng-template #message let-message>
+    <div class="flex flex-col items-center w-full gap-4 border-b border-surface-200 dark:border-surface-700">
+      <div [formGroup]="requestForm">
+        <label class="font-bold text-text-color p-4" for="message">Message </label>
+        <input type="text" pInputText formControlName="message" />
+      </div>
+      <p>{{ message.message }}</p>
+    </div>
+  </ng-template>
+</p-confirm-dialog>
+<p-confirm-dialog key="deleteAppointment"></p-confirm-dialog>
+<p-toast></p-toast>
