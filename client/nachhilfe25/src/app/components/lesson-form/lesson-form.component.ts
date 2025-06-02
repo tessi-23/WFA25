@@ -70,9 +70,6 @@ export class LessonFormComponent implements OnInit{
     let month = today.getMonth();
     let year = today.getFullYear();
 
-    //let prevMonth = (month === 0) ? 11 : month -1;
-    //let prevYear = (prevMonth === 11) ? year - 1 : year;
-
     this.minDate = new Date();
     this.minDate.setMonth(month);
     this.minDate.setFullYear(year);

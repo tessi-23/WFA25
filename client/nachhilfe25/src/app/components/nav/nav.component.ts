@@ -1,4 +1,4 @@
-import {Component, computed, effect, OnInit, signal} from '@angular/core';
+import {Component, computed, signal} from '@angular/core';
 import {Menubar} from 'primeng/menubar';
 import {MenuItem} from 'primeng/api';
 import {Router, RouterLink} from '@angular/router';
@@ -29,10 +29,7 @@ export class NavComponent {
     { label: 'Requests', icon: 'pi pi-bell', command: () => this.router.navigate(['/requests']) },
     { label: 'Logout', icon: 'pi pi-sign-out',
       command: () => {
-        this.logout();
-        if(!this.authService.isLoggedIn()) {
-          this.router.navigate(['/categories']);
-        }
+        this.authService.logout("/categories");
       }
     }
   ]);
@@ -41,8 +38,4 @@ export class NavComponent {
     { label: 'Courses', icon: 'pi pi-book', command: () => this.router.navigate(['/categories']) },
     { label: 'Login', icon: 'pi pi-sign-in', command: () => this.router.navigate(['/login']) }
   ]);
-
-  logout() {
-    return this.authService.logout();
-  }
 }

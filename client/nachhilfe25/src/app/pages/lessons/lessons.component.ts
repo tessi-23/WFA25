@@ -9,10 +9,8 @@ import {AuthService} from '../../services/auth.service';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {Toast} from 'primeng/toast';
 import {ConfirmDialog} from 'primeng/confirmdialog';
-import {Appointment} from '../../classes/appointment';
-import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {InputText} from 'primeng/inputtext';
-import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'bs-lessons',
@@ -28,8 +26,7 @@ import {NgIf} from '@angular/common';
     FormsModule,
     InputText,
     ReactiveFormsModule,
-    NgIf,
-    RouterLink
+    RouterLink,
   ],
   templateUrl: './lessons.component.html',
   providers: [
@@ -154,8 +151,6 @@ export class LessonsComponent implements OnInit{
 
 
   confirmSendBookingRequest(lesson: Lesson, appointmentId: number, event: Event) {
-    // TODO: request senden, button deaktivieren
-
     this.confirmationService.confirm({
       target: event.target as EventTarget,
       key: 'booking',

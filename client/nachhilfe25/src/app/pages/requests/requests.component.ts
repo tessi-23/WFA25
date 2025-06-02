@@ -1,10 +1,8 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
 import {DataView} from 'primeng/dataview';
 import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
-import {Category} from '../../classes/category';
 import {NachhilfeService} from '../../services/nachhilfe.service';
 import {AuthService} from '../../services/auth.service';
-import {Appointment} from '../../classes/appointment';
 import {Booking} from '../../classes/booking';
 import { Status as BookingStatus } from '../../classes/booking';
 import {Button} from 'primeng/button';
@@ -16,17 +14,7 @@ import {AppointmentListComponent} from '../../components/appointment-list/appoin
 
 @Component({
   selector: 'bs-requests',
-  imports: [
-    DataView,
-    NgForOf,
-    NgClass,
-    Button,
-    Dialog,
-    NgIf,
-    Toast,
-    NgStyle,
-    AppointmentListComponent
-  ],
+  imports: [AppointmentListComponent],
   templateUrl: './requests.component.html',
   providers: [MessageService],
 })

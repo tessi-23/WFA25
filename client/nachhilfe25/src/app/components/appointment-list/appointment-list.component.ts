@@ -3,9 +3,7 @@ import {DataView} from 'primeng/dataview';
 import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {Button} from 'primeng/button';
 import {Dialog} from 'primeng/dialog';
-import {Appointment} from '../../classes/appointment';
 import {User} from '../../classes/user';
-import {Booking} from '../../classes/booking';
 import {Toast} from 'primeng/toast';
 
 @Component({

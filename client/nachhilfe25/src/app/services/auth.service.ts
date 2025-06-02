@@ -1,7 +1,7 @@
 import {computed, Injectable, signal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {jwtDecode} from 'jwt-decode';
-import {Observable} from 'rxjs';
+import {Router} from '@angular/router';
 
 interface Token {
   exp: number;
@@ -21,7 +21,7 @@ export class AuthService {
   isLoggedIn = computed(() => this.loggedIn());
   role = computed(() => this.userRole());
 
-  constructor(private http:HttpClient) {
+  constructor(private http:HttpClient, private router: Router) {
     this.loggedIn.set(this.checkLoginStatus());
 
     const storedRole = sessionStorage.getItem('role');
@@ -34,7 +34,7 @@ export class AuthService {
     return this.http.post(`${this.api}/auth/login`, {email, password});
   }
 
-  logout() {
+  logout(urlToNavigate: string) {
     // am Server ausloggen
     this.http.post(`${this.api}/auth/logout`, {});
     // Daten aus der Session löschen
@@ -42,6 +42,8 @@ export class AuthService {
     sessionStorage.removeItem('userId');
     sessionStorage.removeItem('role');
     this.loggedIn.set(false);
+    this.userRole.set(null);
+    this.router.navigate(['/categories']);
   }
 
   public checkLoginStatus(): boolean {

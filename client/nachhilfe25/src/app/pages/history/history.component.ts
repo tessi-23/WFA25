@@ -1,8 +1,4 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
-import {Button} from "primeng/button";
-import {DataView} from "primeng/dataview";
-import {Dialog} from "primeng/dialog";
-import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {Booking} from '../../classes/booking';
 import {NachhilfeService} from '../../services/nachhilfe.service';
 import {AuthService} from '../../services/auth.service';
@@ -11,15 +7,7 @@ import {AppointmentListComponent} from '../../components/appointment-list/appoin
 
 @Component({
   selector: 'bs-history',
-  imports: [
-    Button,
-    DataView,
-    Dialog,
-    NgForOf,
-    NgIf,
-    NgClass,
-    AppointmentListComponent
-  ],
+  imports: [AppointmentListComponent],
   templateUrl: './history.component.html',
   styles: ``
 })
