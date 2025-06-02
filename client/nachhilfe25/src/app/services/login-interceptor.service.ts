@@ -1,4 +1,4 @@
-import {inject, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {Observable, tap} from 'rxjs';
 
@@ -6,6 +6,8 @@ import {Observable, tap} from 'rxjs';
 export class LoginInterceptorService implements HttpInterceptor{
   constructor() {}
 
+
+  // Fehlerbehandlung, fängt alle Responses ab
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(tap((event: HttpEvent<any>) => {
       }, (err: any) => {

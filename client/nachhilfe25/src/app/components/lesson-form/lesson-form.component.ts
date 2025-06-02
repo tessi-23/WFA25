@@ -109,23 +109,35 @@ export class LessonFormComponent implements OnInit{
 
     if(this.lesson?.appointments) { // update
       for(let appointment of this.lesson.appointments) {
+        // strings in Date Objekte umwandeln, damit p-datepicker sie auslesen kann
+        const dateObj = new Date(appointment.date);
+        const startObj = this.timeStringToDate(appointment.start);
+        const endObj = this.timeStringToDate(appointment.end);
+
         this.appointments.push(this.fb.group({
           id: appointment.id,
           title: [appointment.title, Validators.required],
-          date: [appointment.date, Validators.required],
-          start: [appointment.start, Validators.required],
-          end: [appointment.end, Validators.required],
+          date: [dateObj, Validators.required],
+          start: [startObj, Validators.required],
+          end: [endObj, Validators.required],
           status: appointment.status,
           price: [appointment.price, Validators.required]
         }, { validators: LessonValidators.startBeforeEndValidator }))
       }
-      console.log(this.appointments);
     }
 
     if(this.lesson.appointments?.length === 0) { // create
       this.addAppointmentControl();
     }
   }
+  private timeStringToDate(time: any): Date {
+    const [hours, minutes, seconds] = time.split(':').map(Number);
+    const date = new Date();
+    date.setHours(hours, minutes, seconds || 0, 0);
+    return date;
+  }
+
+
 
   protected addAppointmentControl() {
     this.appointments.push(this.fb.group({
@@ -152,9 +164,9 @@ export class LessonFormComponent implements OnInit{
         appointments: formValue.appointments.map((app: Appointment) => ({
           id: app.id,
           title: app.title,
-          date: app.date,
-          start: app.start,
-          end: app.end,
+          date: this.formatDate(app.date),
+          start: this.formatTime(app.start),
+          end: this.formatTime(app.end),
           status: app.status,
           price: app.price
         }))
@@ -212,7 +224,6 @@ export class LessonFormComponent implements OnInit{
 
   protected removeAppointment(index: number) {
     this.appointments.removeAt(index);
-    console.log(index);
     this.messageService.add({
       severity: 'info',
       summary: 'Appointment removed',

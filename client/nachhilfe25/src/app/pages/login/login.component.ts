@@ -31,7 +31,6 @@ export class LoginComponent implements OnInit{
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute,
     private messageService: MessageService,
   ) {
     this.loginForm = this.fb.group({
@@ -56,7 +55,6 @@ export class LoginComponent implements OnInit{
 
     this.authService.login(email, password).subscribe(
       (res:any) => {
-        console.log(res);
         this.authService.setSessionStorage((res as Response).access_token);
         this.router.navigate(['/']);
       }, () => {
