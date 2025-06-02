@@ -3,7 +3,7 @@
   <component name="WebServers">
     <option name="servers">
       <webServer id="7bdafe3e-9518-48bb-8a89-4fae6e8fbeb3" name="HETZNER" url="http://nachhilfe25.s2210456033.student.kwmhgb.at/ ">
-        <fileTransfer rootFolder="/usr/home/sstud950/public_html/nachhilfe25/nachhilfeServer" accessType="SFTP" host="s2210456033.student.kwmhgb.at" port="222" sshConfigId="a95dcfdd-7f93-4c70-8577-2397d293f28b" sshConfig="sstud950@s2210456033.student.kwmhgb.at:222 password">
+        <fileTransfer rootFolder="/usr/home/sstud950/public_html/" accessType="SFTP" host="s2210456033.student.kwmhgb.at" port="222" sshConfigId="a95dcfdd-7f93-4c70-8577-2397d293f28b" sshConfig="sstud950@s2210456033.student.kwmhgb.at:222 password">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>

@@ -11,13 +11,13 @@ import {AuthService} from '../../services/auth.service';
     RouterLink
   ],
   templateUrl: './nav.component.html',
-  styles: ``
 })
 export class NavComponent {
   constructor(private authService: AuthService, private router: Router) { }
 
 
   // Dynamisches Menü basierend auf dem Login-Status
+  // wenn sich der isLoggedIn() status ändert, wird items neu berechnet
   items = computed<MenuItem[]>(() =>
     this.authService.isLoggedIn() ? this.loggedInItems() : this.loggedOutItems()
   );
@@ -27,11 +27,7 @@ export class NavComponent {
     { label: 'Upcoming Appointments', icon: 'pi pi-calendar', command: () => this.router.navigate(['/upcoming']) },
     { label: 'History', icon: 'pi pi-history', command: () => this.router.navigate(['/history']) },
     { label: 'Requests', icon: 'pi pi-bell', command: () => this.router.navigate(['/requests']) },
-    { label: 'Logout', icon: 'pi pi-sign-out',
-      command: () => {
-        this.authService.logout("/categories");
-      }
-    }
+    { label: 'Logout', icon: 'pi pi-sign-out', command: () => {this.authService.logout("/categories");}}
   ]);
 
   private loggedOutItems = signal<MenuItem[]>([

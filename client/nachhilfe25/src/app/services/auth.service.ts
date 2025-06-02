@@ -68,7 +68,6 @@ export class AuthService {
         sessionStorage.removeItem('userId');
         sessionStorage.removeItem('role');
         this.loggedIn.set(false);
-        this.router.navigate(['/login']);
         return false;
       }
     } else {
