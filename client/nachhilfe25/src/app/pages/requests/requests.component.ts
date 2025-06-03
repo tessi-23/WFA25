@@ -1,15 +1,9 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
-import {DataView} from 'primeng/dataview';
-import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {NachhilfeService} from '../../services/nachhilfe.service';
 import {AuthService} from '../../services/auth.service';
 import {Booking} from '../../classes/booking';
 import { Status as BookingStatus } from '../../classes/booking';
-import {Button} from 'primeng/button';
-import {Dialog} from 'primeng/dialog';
-import {User} from '../../classes/user';
 import {MessageService} from 'primeng/api';
-import {Toast} from 'primeng/toast';
 import {AppointmentListComponent} from '../../components/appointment-list/appointment-list.component';
 
 @Component({

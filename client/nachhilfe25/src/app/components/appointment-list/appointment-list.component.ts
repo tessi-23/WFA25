@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output, Input, output} from '@angular/core';
+import {Component, EventEmitter, Output, Input} from '@angular/core';
 import {DataView} from 'primeng/dataview';
 import {NgClass, NgStyle} from '@angular/common';
 import {Button} from 'primeng/button';

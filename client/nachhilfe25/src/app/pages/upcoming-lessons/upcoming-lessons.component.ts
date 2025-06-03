@@ -8,18 +8,12 @@ import {AppointmentListComponent} from '../../components/appointment-list/appoin
 @Component({
   selector: 'bs-upcoming-lessons',
   imports: [AppointmentListComponent],
-  templateUrl: './upcoming-lessons.component.html',
-  styles: ``
+  templateUrl: './upcoming-lessons.component.html'
 })
 export class UpcomingLessonsComponent implements OnInit{
   upcomingAppointments = signal<Booking[]>([]);
   private nachhilfeService = inject(NachhilfeService);
   protected authService = inject(AuthService);
-
-  visibleTutorModal: boolean = false;
-  visibleStudentModal: boolean = false;
-  selectedTutor: any = null;
-  selectedStudent: any = null;
 
   ngOnInit() {
     const role = this.authService.getRole();
@@ -32,15 +26,5 @@ export class UpcomingLessonsComponent implements OnInit{
         this.upcomingAppointments.set(res);
       })
     }
-  }
-
-  showTutorDialog(tutor: User | null) {
-    this.selectedTutor = tutor;
-    this.visibleTutorModal = true;
-  }
-
-  showStudentDialog(student: User | null) {
-    this.selectedStudent = student;
-    this.visibleStudentModal = true;
   }
 }
