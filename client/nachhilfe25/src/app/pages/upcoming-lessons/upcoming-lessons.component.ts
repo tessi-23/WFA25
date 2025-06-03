@@ -2,7 +2,6 @@ import {Component, inject, OnInit, signal} from '@angular/core';
 import {Booking} from '../../classes/booking';
 import {NachhilfeService} from '../../services/nachhilfe.service';
 import {AuthService} from '../../services/auth.service';
-import {User} from '../../classes/user';
 import {AppointmentListComponent} from '../../components/appointment-list/appointment-list.component';
 
 @Component({
