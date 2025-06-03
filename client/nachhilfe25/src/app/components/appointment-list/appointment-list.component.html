@@ -1,94 +1,103 @@
 <div class="card flex justify-center">
   <p-dataView [value]="appointments">
-    <ng-template #list let-a>
+    <ng-template #list let-appointments>
       <div class="grid grid-cols-12 gap-4 grid-nogutter">
-        <div *ngFor="let a of appointments; let first = first" class="col-span-12">
-          <div
-            [ngStyle]="a.status === 'rejected' ? { 'background-color': '#372121', 'opacity': '0.7' } : {}"
-            class="flex flex-col sm:flex-row sm:items-center p-6 gap-4"
-            [ngClass]="{ 'border-t border-surface-200 dark:border-surface-700': !first }"
-          >
-            <!-- Termininformationen -->
-            <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
-              <div class="flex flex-row md:flex-col justify-between items-start gap-2">
-                <div>
-                  <span class="font-medium text-secondary text-sm">
-                    {{ a.appointment.title }}
-                  </span>
-                  <div class="text-lg font-medium text-surface-900 dark:text-surface-0 mt-2">
-                    {{ a.appointment.date }}
-                    <span class="text-xs text-surface-500 dark:text-surface-400">
-                      ({{ a.appointment.start }} - {{ a.appointment.end }})
+        @for (a of appointments; let first = $first; track a.id) {
+          <div class="col-span-12">
+            <div class="flex flex-col sm:flex-row sm:items-center p-6 gap-4"
+              [ngStyle]="a.status === 'rejected' ? { 'background-color': '#372121', 'opacity': '0.7' } : {}"
+              [ngClass]="{'border-t border-surface-200 dark:border-surface-700': !first }"
+            >
+              <!-- Termininformationen -->
+              <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
+                <div class="flex flex-row md:flex-col justify-between items-start gap-2">
+                  <div>
+                    <span class="font-medium text-secondary text-sm">
+                      {{ a.appointment.title }}
                     </span>
-                    <br>
-                    {{ a.appointment.price }} €
-                    <div class="text-xs text-surface-500 dark:text-surface-400">
-                      Appointment: {{ a.appointment.status }} <br>
-                      Booking: {{ a.status }}
-                    </div>
-                    <div class="text-xs text-surface-500 dark:text-surface-400">
-                      Comment: {{ a.comment }}
+                    <div class="text-lg font-medium text-surface-900 dark:text-surface-0 mt-2">
+                      {{ a.appointment.date }}
+                      <span class="text-xs text-surface-500 dark:text-surface-400">
+                        ({{ a.appointment.start }} - {{ a.appointment.end }})
+                      </span>
+                      <br>
+                      {{ a.appointment.price }} €
+                      <div class="text-xs text-surface-500 dark:text-surface-400">
+                        Appointment: {{ a.appointment.status }} <br>
+                        Booking: {{ a.status }}
+                      </div>
+                      <div class="text-xs text-surface-500 dark:text-surface-400">
+                        Comment: {{ a.comment }}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              <!-- Aktionen / Details -->
-              <div class="flex flex-row md:items-end gap-4">
+                <!-- Aktionen / Details -->
+                <div class="flex flex-row md:items-end gap-4">
 
-                <!-- Buttons für Buchungsanfragen (nur Tutor) -->
-                <ng-container *ngIf="type === 'request' && role === 'tutor'">
-                  <p-button label="Accept" icon="pi pi-check" severity="success"
-                            (click)="accept.emit(a.id)"
-                            [disabled]="a.status === 'rejected'"></p-button>
-                  <p-button label="Reject" icon="pi pi-times" severity="danger"
-                            (click)="reject.emit(a.id)"
-                            [disabled]="a.status === 'rejected'"></p-button>
-                </ng-container>
+                  <!-- Buttons für Requests (nur Tutor) -->
+                  @if(type === 'request' && role === 'tutor'){
+                    <p-button label="Accept" icon="pi pi-check" severity="success"
+                              (click)="accept.emit(a.id)"
+                              [disabled]="a.status === 'rejected'">
+                    </p-button>
+                    <p-button label="Reject" icon="pi pi-times" severity="danger"
+                              (click)="reject.emit(a.id)"
+                              [disabled]="a.status === 'rejected'">
+                    </p-button>
+                  }
 
-                <!-- Tutor-Details für Student -->
-                <ng-container *ngIf="role === 'student' && a.tutor">
-                  <p-button (click)="showTutorDialog(a.tutor)" icon="pi pi-user" [rounded]="true" severity="secondary" />
-                </ng-container>
+                  <!-- Wird immer angezeigt: -->
+                  <!-- Button für Student-Details (nur Tutor) -->
+                  @if(role === 'tutor' && a.student) {
+                    <p-button (click)="showStudentDialog(a.student)" icon="pi pi-user" [rounded]="true" severity="secondary" />
+                  }
 
-                <!-- Student-Details für Tutor -->
-                <ng-container *ngIf="role === 'tutor' && a.student">
-                  <p-button (click)="showStudentDialog(a.student)" icon="pi pi-user" [rounded]="true" severity="secondary" />
-                </ng-container>
+                  <!-- Button für Tutor-Details (nur Student) -->
+                  @if(role === 'student' && a.tutor) {
+                    <p-button (click)="showTutorDialog(a.tutor)" icon="pi pi-user" [rounded]="true" severity="secondary" />
+                  }
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        }
       </div>
     </ng-template>
   </p-dataView>
 </div>
 
 <!-- Tutor-Dialog -->
-<p-dialog *ngIf="selectedTutor"
-          [(visible)]="visibleTutorModal"
-          [modal]="true"
-          [style]="{ width: '25rem' }"
-          [header]="selectedTutor?.firstname + ' ' + selectedTutor?.lastname + ' (' + selectedTutor?.age + ')'">
-  <span class="p-text-secondary block mb-8">
-    {{ selectedTutor?.email }} <br>
-    {{ selectedTutor?.phone }} <br>
-    {{ selectedTutor?.qualification }} <br>
-    {{ selectedTutor?.description }} <br>
-  </span>
-</p-dialog>
+@if(selectedTutor) {
+  <p-dialog
+    [(visible)]="visibleTutorModal"
+    [modal]="true"
+    [style]="{ width: '25rem' }"
+    [header]="selectedTutor?.firstname + ' ' + selectedTutor?.lastname + ' (' + selectedTutor?.age + ')'">
+    <span class="p-text-secondary block mb-8">
+      {{ selectedTutor?.email }} <br>
+      {{ selectedTutor?.phone }} <br>
+      {{ selectedTutor?.qualification }} <br>
+      {{ selectedTutor?.description }} <br>
+    </span>
+  </p-dialog>
+}
+
 
 <!-- Student-Dialog -->
-<p-dialog *ngIf="selectedStudent"
-          [(visible)]="visibleStudentModal"
-          [modal]="true"
-          [style]="{ width: '25rem' }"
-          [header]="selectedStudent?.firstname + ' ' + selectedStudent?.lastname + ' (' + selectedStudent?.age + ')'">
+@if(selectedStudent) {
+  <p-dialog
+    [(visible)]="visibleStudentModal"
+    [modal]="true"
+    [style]="{ width: '25rem' }"
+    [header]="selectedStudent?.firstname + ' ' + selectedStudent?.lastname + ' (' + selectedStudent?.age + ')'">
   <span class="p-text-secondary block mb-8">
     {{ selectedStudent?.email }} <br>
     {{ selectedStudent?.phone }} <br>
     {{ selectedStudent?.qualification }} <br>
     {{ selectedStudent?.description }} <br>
   </span>
-</p-dialog>
+  </p-dialog>
+}
 <p-toast></p-toast>

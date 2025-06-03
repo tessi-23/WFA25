@@ -24,32 +24,25 @@ export class RequestsComponent implements OnInit{
   protected authService = inject(AuthService);
   private messageService = inject(MessageService);
 
-  visibleTutorModal: boolean = false;
-  selectedTutor: any = null;
-
   ngOnInit() {
     const role = this.authService.getRole();
-    if(role === 'student') {
+    if(role === 'student') { // gesendeten Requests
       this.nachhilfeService.getBookingRequestsForStudent().subscribe(res => {
         this.requests.set(res);
       })
-    } else if (role === 'tutor') {
+    } else if (role === 'tutor') { // empfangene Requests
       this.nachhilfeService.getBookingRequestsForTutor().subscribe(res => {
-        console.log(res);
         this.requests.set(res);
       })
     }
   }
 
-  showTutorDialog(tutor: User | null) {
-    this.selectedTutor = tutor;
-    this.visibleTutorModal = true;
-  }
-
   acceptBookingRequest(bookingId:number) {
     this.nachhilfeService.acceptBooking(bookingId).subscribe({
       next: () => {
-        this.requests.set(this.requests() // requests aktualisieren (ohne akzeptiertes booking)
+        // requests aktualisieren (ohne akzeptiertes booking)
+        this.requests.set(this.requests()
+          // array durchlaufen und nur die requests liefern, die die bedingung erfüllen
           .filter(req => req.id !== bookingId));
         this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'Appointment accepted' });
       }, error: (err) => {
@@ -61,14 +54,14 @@ export class RequestsComponent implements OnInit{
   rejectBookingRequest(bookingId:number) {
     this.nachhilfeService.rejectBooking(bookingId).subscribe({
       next: () => {
-        const updatedBookings = this.requests()
+        const updatedBookings = this.requests() // kopie von request array
           .map(req => {
-              if (req.id === bookingId) {
-                return { ...req, status: 'rejected' as BookingStatus };
+              if (req.id === bookingId) { // die rejected buchung
+                return { ...req, status: 'rejected' as BookingStatus }; // neues Objekt, aber status auf rejected ändern
               }
-              return req;
+              return req; // sonst buchung so lassen
             });
-        this.requests.set(updatedBookings);
+        this.requests.set(updatedBookings); // requests updaten
 
         this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'Appointment rejected' });
       }, error: (err) => {
