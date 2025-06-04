@@ -1,7 +1,7 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
 import {Lesson} from '../../classes/lesson';
 import {NachhilfeService} from '../../services/nachhilfe.service';
-import {ActivatedRoute, Params, Router, RouterLink} from '@angular/router';
+import {ActivatedRoute, Params, RouterLink} from '@angular/router';
 import {Accordion, AccordionContent, AccordionHeader, AccordionPanel} from 'primeng/accordion';
 import {Button} from 'primeng/button';
 import {Dialog} from 'primeng/dialog';
@@ -38,23 +38,17 @@ export class LessonsComponent implements OnInit{
   requestForm: FormGroup;
   visibleInfoModal: boolean = false;
   visibleTutorModal: boolean = false;
+  categoryId :number = 0;
 
   protected nachhilfeService = inject(NachhilfeService);
   protected authService = inject(AuthService);
-  private router = inject(Router);
   private route = inject(ActivatedRoute);
   private confirmationService = inject(ConfirmationService);
   private messageService = inject(MessageService);
 
-  //constructor(private fb:FormBuilder) {
-  //  this.requestForm = this.fb.group({});
-  //}
-
   constructor() {
     this.requestForm = new FormGroup({});
   }
-
-  categoryId :number = 0;
 
   ngOnInit() {
     this.requestForm = new FormGroup({
@@ -62,36 +56,29 @@ export class LessonsComponent implements OnInit{
     });
 
     const role = this.authService.getRole();
-    console.log(role);
     const params:Params = this.route.snapshot.params; // categoryId holen
     this.categoryId = params['categoryId'];
 
-    if(role === 'tutor') {
+    if(role === 'tutor') { // eigene erstellte lessons
       this.nachhilfeService.getLessonsForTutor(this.categoryId).subscribe(
         res => {
-          console.log(res);
           this.lessons.set(res)
         }
       );
-    } else if (role === 'student') {
+    } else if (role === 'student') { // nur die Termine, die student noch nicht gebucht hat
       this.nachhilfeService.getLessonsForStudent(this.categoryId).subscribe(
         res => {
           this.lessons.set(res);
         }
       )
     } else {
-      // alle passenden lessons holen
+      // alle lessons holen
       this.nachhilfeService.getLessonsByID(this.categoryId).subscribe(
         res => {
-          console.log(res);
           this.lessons.set(res)
         }
       );
     }
-  }
-
-  goBack() {
-    this.router.navigate(['categories']);
   }
 
   showTutorDialog() {

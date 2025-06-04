@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Appointment;
 use App\Models\Lesson;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class LessonController extends Controller {
     // TODO: status auf pending setzen

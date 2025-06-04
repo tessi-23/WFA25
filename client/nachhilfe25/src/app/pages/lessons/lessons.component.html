@@ -1,14 +1,16 @@
+<!--Für Tutor-->
 @if (authService.getRole() === 'tutor') {
   <p-button label="Create Lesson" [routerLink]="'form'"></p-button>
 }
 
 <p-button class="pl-4" label="Back to Courses" [routerLink]="'/categories'"></p-button>
 <div class="card">
-  <p-accordion [value]="['0']" [multiple]="true">
-    @for (lesson of lessons(); track lesson.title) {
+  <p-accordion>
+    @for (lesson of lessons(); track lesson.id) {
       <p-accordion-panel [value]="lesson.id">
         <p-accordion-header>
           {{ lesson.title }}
+          <!--Für Alle außer Tutor-->
           @if (authService.getRole() !== 'tutor') {
             <p-button (click)="showInfoDialog()" icon="pi pi-info" [rounded]="true" severity="secondary" />
             <p-dialog header="{{ lesson.title }}"
@@ -26,6 +28,7 @@
             </span>
             </p-dialog>
           } @else {
+            <!--Für Tutor zum bearbeiten-->
             <p-button icon="pi pi-pencil" [rounded]="true" severity="secondary"
               [routerLink]="['form', lesson.id]">
             </p-button>
@@ -42,11 +45,13 @@
                 {{ appointment.price }} € <br>
                 {{ appointment.status }}
               </div>
+              <!--Für Tutor zum löschen-->
               @if (authService.getRole() === 'tutor') {
                 <p-button
                   (click)="confirmDeleteAppointment(lesson.id, appointment.id, $event)"
                   icon="pi pi-trash" [rounded]="true" severity="danger">
                 </p-button>
+                <!--Für Student zum Request senden-->
               } @else if (authService.getRole() === 'student') {
                 <p-button
                   label="Send booking request"
@@ -64,7 +69,7 @@
   <ng-template #message let-message>
     <div class="flex flex-col items-center w-full gap-4 border-b border-surface-200 dark:border-surface-700">
       <div [formGroup]="requestForm">
-        <label class="font-bold text-text-color p-4" for="message">Message </label>
+        <label class="font-bold text-text-color p-4" for="message">Message</label>
         <input type="text" pInputText formControlName="message" />
       </div>
       <p>{{ message.message }}</p>
