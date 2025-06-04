@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Gate;
 
 class BookingController extends Controller
 {
-    // TODO: evtl. unnötig?
     // alle Buchungen
     public function index(): JsonResponse {
         $tutor = auth()->user();
@@ -28,7 +27,6 @@ class BookingController extends Controller
     public function pending(): JsonResponse {
         $tutor = auth()->user();
 
-        // TODO: prüfen
         $expiredAppointments = Appointment::where('status', 'available')
             ->where(function ($query) {
                 $query->where('date', '<', now()->toDateString())
@@ -107,7 +105,6 @@ class BookingController extends Controller
         foreach ($bookings as $booking) {
             $appointment = $booking->appointment; // entsprechender Termin pro Buchung
 
-            // TODO: prüfen, funktioniert evtl. noch nicht?
             // wenn Termin abgelaufen status auf finished setzen
             if ($appointment->date < now()->toDateString() ||
                 $appointment->date == now()->toDateString() && $appointment->start < now()->toTimeString()) {

@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Gate;
 
 class AppointmentController extends Controller
 {
-    // TODO: prüfen
     public function availableByLesson($lessonId): JsonResponse {
 
         $expiredAppointments = Appointment::where('date', '<', now()->toDateString())
@@ -123,7 +122,7 @@ class AppointmentController extends Controller
         return $request;
     }
 
-    // TODO: prüfen, funktioniert noch nicht
+
     private function isFutureDateTime(string $date, string $time): bool {
         try {
             // Kombiniere Datum und Zeit in ein DateTime-Objekt

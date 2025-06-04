@@ -1,6 +1,3 @@
-import {Lesson} from './lesson';
-import {Time} from '@angular/common';
-
 export enum Status {
   available = 'available',
   booked = 'booked'
@@ -14,7 +11,6 @@ export class Appointment {
     public end:Date,
     public status:Status,
     public price:number,
-    //public lesson_id:Lesson
   ) {
   }
 }

@@ -14,7 +14,6 @@ export class Booking {
     public status:Status,
     public appointment:Appointment,
     public tutor:User,
-    //public student_id:User,
     public comment?:string,
   ) {
   }

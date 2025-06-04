@@ -8,7 +8,6 @@ use App\Models\Lesson;
 use Illuminate\Http\JsonResponse;
 
 class LessonController extends Controller {
-    // TODO: status auf pending setzen
     public function availableByID(string $categoryId): JsonResponse {
         $studentId = auth()->id();
 

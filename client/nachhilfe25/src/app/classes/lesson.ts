@@ -1,4 +1,3 @@
-import {Category} from './category';
 import {Appointment} from './appointment';
 import {Gender, Role, User} from './user';
 
@@ -9,7 +8,6 @@ export class Lesson {
     public description:string,
     public tutor_id:User,
     public tutor:User,
-    //public category_id:Category,
     public appointments:Appointment[]
   ) {}
 
