@@ -50,11 +50,11 @@ export class LoginComponent implements OnInit{
   }
 
   login() {
-    const {email, password} = this.loginForm.value;
+    const {email, password} = this.loginForm.value; // Werte aus Formular auslesen
 
     this.authService.login(email, password).subscribe(
       (res:any) => {
-        this.authService.setSessionStorage((res as Response).access_token);
+        this.authService.setSessionStorage((res as Response).access_token); // Token is sessionStorage speichern
         this.router.navigate(['/']);
       }, () => {
         this.messageService.add({
