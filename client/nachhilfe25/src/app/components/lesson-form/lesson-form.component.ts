@@ -13,14 +13,13 @@ import {AuthService} from '../../services/auth.service';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {MessageService} from 'primeng/api';
 import {Lesson} from '../../classes/lesson';
-import {Appointment, Status} from '../../classes/appointment';
+import {Appointment} from '../../classes/appointment';
 import {DatePicker} from 'primeng/datepicker';
 import {InputGroup} from 'primeng/inputgroup';
 import {InputGroupAddon} from 'primeng/inputgroupaddon';
 import {InputNumber} from 'primeng/inputnumber';
 import {Button} from 'primeng/button';
 import {NachhilfeService} from '../../services/nachhilfe.service';
-import {NgForOf, NgIf} from '@angular/common';
 import {Toast} from 'primeng/toast';
 import {LessonFormErrorMessages} from './lesson-form-error-messages';
 import {LessonValidators} from '../../services/validators';
@@ -37,19 +36,17 @@ import {LessonValidators} from '../../services/validators';
     InputGroupAddon,
     InputNumber,
     Button,
-    NgIf,
     RouterLink,
     Toast,
-    NgForOf
   ],
   templateUrl: './lesson-form.component.html',
   providers: [MessageService]
 })
 export class LessonFormComponent implements OnInit{
   lessonForm: FormGroup;
-  lesson: Lesson = Lesson.empty();
-  isUpdatingLesson: boolean = false;
   appointments: FormArray;
+  lesson: Lesson = Lesson.empty(); // leere Lesson erstellen
+  isUpdatingLesson: boolean = false;
   minDate: Date | undefined;
   errors: {[key: string]: string} = {};
   constructor(
@@ -65,11 +62,13 @@ export class LessonFormComponent implements OnInit{
   }
 
   ngOnInit(): void {
+    // aktuelle lesson abrufen
     const lessonId = this.route.snapshot.paramMap.get('lessonId');
     let today = new Date();
-    let month = today.getMonth();
-    let year = today.getFullYear();
+    let month = today.getMonth(); // 0-11
+    let year = today.getFullYear(); // zB 2025
 
+    // heute als Mindestdatum speichern
     this.minDate = new Date();
     this.minDate.setMonth(month);
     this.minDate.setFullYear(year);
@@ -77,7 +76,7 @@ export class LessonFormComponent implements OnInit{
     if(lessonId) { // update
       this.isUpdatingLesson = true;
       this.nachhilfeService.getLessonByID(lessonId).subscribe(lesson => {
-        this.lesson = lesson;
+        this.lesson = lesson; // signal auf aktuelle lesson setzen
         this.initLessonForm();
       });
     } else { // create
@@ -127,18 +126,21 @@ export class LessonFormComponent implements OnInit{
     }
 
     if(this.lesson.appointments?.length === 0) { // create
-      this.addAppointmentControl();
+      this.addAppointmentControl(); // leeres hinzufügen (ohne id)
     }
   }
+
+  // Datum String in Date Objekt umwandeln für p-datepicker
   private timeStringToDate(time: any): Date {
+    // Zeit String zerlegen: 13:20:00 in ['13','20','00']
+    // mit map(Number) strings in Zahlen umwandeln
     const [hours, minutes, seconds] = time.split(':').map(Number);
-    const date = new Date();
-    date.setHours(hours, minutes, seconds || 0, 0);
+    const date = new Date(); // neues Objekt mit aktuellem Datum
+    date.setHours(hours, minutes, seconds || 0, 0); // werte setzen
     return date;
   }
 
-
-
+  // leeres appointment dazufügen
   protected addAppointmentControl() {
     this.appointments.push(this.fb.group({
       title: ['', Validators.required],
@@ -152,19 +154,19 @@ export class LessonFormComponent implements OnInit{
 
 
   protected submit() {
-    const categoryId = this.route.snapshot.paramMap.get('categoryId');
-    const formValue = this.lessonForm.value;
-    const { id, ...formWithoutId } = formValue;
+    const categoryId = this.route.snapshot.paramMap.get('categoryId'); // aktuelle Kategorie
+    const formValue = this.lessonForm.value; // daten der gesamten Kategorie
+    const { id, ...formWithoutId } = formValue; // ohne id speichern, da sie autoincrement ist
 
 
     if(this.isUpdatingLesson) {
-      const lesson = {
+      const lesson = { // kopie erstellen und neue Werte speichern
         ...formValue,
         tutor_id: this.authService.getCurrentUserId(),
         appointments: formValue.appointments.map((app: Appointment) => ({
           id: app.id,
           title: app.title,
-          date: this.formatDate(app.date),
+          date: this.formatDate(app.date), // in string umwandeln für DB
           start: this.formatTime(app.start),
           end: this.formatTime(app.end),
           status: app.status,
@@ -180,22 +182,20 @@ export class LessonFormComponent implements OnInit{
         this.router.navigate([`/categories/lessons/${categoryId}`]);
       });
     } else {
-      const lesson = {
-        ...formWithoutId,
+      const lesson = { // create
+        ...formWithoutId, // ohne id erstellen, da autoincrement
         category_id: categoryId,
         tutor_id: this.authService.getCurrentUserId(),
         appointments: formValue.appointments.map((app: Appointment) => ({
           title: app.title,
-          date: this.formatDate(app.date),
+          date: this.formatDate(app.date), // in string umwandeln für DB
           start: this.formatTime(app.start),
           end: this.formatTime(app.end),
           status: app.status,
           price: app.price
         }))
       };
-
       this.nachhilfeService.createLesson(lesson).subscribe(() => {
-        console.log(lesson);
         this.messageService.add({
           severity: 'success',
           summary: 'Lesson created',
@@ -207,22 +207,28 @@ export class LessonFormComponent implements OnInit{
     }
   }
 
+  // Date Objekt in string umwandeln
   private formatDate(date: Date): string {
+    // ISOString: "2025-06-04T14:25:30.000Z" -> ersten Teil returnen
     return date.toISOString().split('T')[0]; // YYYY-MM-DD
   }
 
+  // Date Objekt in string umwandeln
   private formatTime(time: Date): string {
+    // Stunden holen 0-23, in string umwandeln, vorne 0 hinzufügen wenn stunde unter 10
     const hours = time.getHours().toString().padStart(2, '0');
     const minutes = time.getMinutes().toString().padStart(2, '0');
-    return `${hours}:${minutes}:00`; // HH:mm:ss
+    return `${hours}:${minutes}:00`; // HH:mm:ss Format für DB
   }
 
   protected clearAppointment(index: number) {
+    // bestimmtes appointment leeren
     const appGroup = this.appointments.at(index) as FormGroup;
     appGroup.reset();
   }
 
   protected removeAppointment(index: number) {
+    // bestimmtes appointment entfernen
     this.appointments.removeAt(index);
     this.messageService.add({
       severity: 'info',
@@ -236,7 +242,7 @@ export class LessonFormComponent implements OnInit{
     for(const message of LessonFormErrorMessages) {
       const control = this.lessonForm.get(message.forControl);
       // wenn es ein control gibt
-      // der user schon drinn war
+      // der user schon drin war
       // das Formularfeld gerade invalide ist
       // wenn es das Feld gibt
       // wenn es für den Validator eine Fehlermeldung gibt
@@ -249,10 +255,10 @@ export class LessonFormComponent implements OnInit{
     }
   }
 
+  // für FormArray, nur geänderte Controls neu rendern
   protected trackByFn(index: number, item: AbstractControl) {
     return item.get('id')?.value || index;
   }
-
 }
 
 

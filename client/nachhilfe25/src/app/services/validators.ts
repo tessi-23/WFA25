@@ -1,7 +1,4 @@
-
-import {FormControl} from '@angular/forms';
-import {map, Observable} from 'rxjs';
-import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, ValidationErrors } from '@angular/forms';
 
 export class LessonValidators {
 
@@ -11,7 +8,6 @@ export class LessonValidators {
     const end = group.get('end')?.value;
 
     if (!start || !end) return null; // Noch nicht vollständig ausgefüllt
-
-    return start < end ? null : { startAfterEnd: true };
+    return start < end ? null : { startAfterEnd: true }; // gibt evtl Fehlerobjekt zurück
   }
 }
